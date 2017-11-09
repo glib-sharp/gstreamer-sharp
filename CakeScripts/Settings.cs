@@ -13,7 +13,25 @@ class Settings
         {
             new GAssembly("GstSharp")
             {
-                Deps = new[] { "GLibSharp", "GioSharp" }
+                Deps = new[] { "GLibSharp", "GioSharp" },
+                NativeDeps = new[] {
+                    "libgstreamer-1.0.so.0", "libgstreamer-1.0-0.dll",
+                    "libgstaudio-1.0.so.0", "libgstaudio-1.0-0.dll",
+                    "libgstbase-1.0.so.0", "libgstbase-1.0-0.dll",
+                    "libgstvideo-1.0.so.0", "libgstvideo-1.0-0.dll",
+                    "libgstpbutils-1.0.so.0", "libgstpbutils-1.0-0.dll",
+                    "libgsttag-1.0.so.0", "libgsttag-1.0-0.dll",
+                    "libgstapp-1.0.so.0", "libgstapp-1.0-0.dll",
+                    "libgstfft-1.0.so.0", "libgstfft-1.0-0.dll",
+                    "libgstnet-1.0.so.0", "libgstnet-1.0-0.dll",
+                    "libgstrtp-1.0.so.0", "libgstrtp-1.0-0.dll",
+                    "libgstrtsp-1.0.so.0", "libgstrtsp-1.0-0.dll",
+                    "libgstsdp-1.0.so.0", "libgstsdp-1.0-0.dll",
+                    "libgstcontroller-1.0.so.0", "libgstcontroller-1.0-0.dll",
+                    "libglib-2.0.so.0", "libglib-2.0-0.dll",
+                    "libgobject-2.0.so.0", "libgobject-2.0-0.dll",
+                    "libgthread-2.0.so.0", "libgthread-2.0-0.dll",
+                }
             }
         };
     }

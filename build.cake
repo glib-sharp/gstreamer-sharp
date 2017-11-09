@@ -36,9 +36,10 @@ Task("Prepare")
 {
     // Build tools
     DotNetCoreRestore("GtkSharp/Source/Tools/Tools.sln");
-    MSBuild("GtkSharp/Source/Tools/Tools.sln", new MSBuildSettings {
-        Verbosity = Verbosity.Minimal,
+    DotNetCoreBuild("GtkSharp/Source/Tools/Tools.sln", new DotNetCoreBuildSettings {
+        Verbosity = DotNetCoreVerbosity.Minimal,
         Configuration = "Release",
+        OutputDirectory = "BuildOutput/Tools"
     });
 
     // Generate code and prepare libs projects
