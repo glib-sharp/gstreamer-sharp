@@ -9,6 +9,7 @@ Settings.Cake = Context;
 Settings.Version = "1.13.0";
 Settings.BuildTarget = Argument("BuildTarget", "Default");
 Settings.Assembly = Argument("Assembly", "");
+var configuration = Argument("Configuration", "Release");
 
 var msbuildsettings = new DotNetCoreMSBuildSettings();
 var list = new List<GAssembly>();
@@ -35,10 +36,10 @@ Task("Prepare")
     .Does(() =>
 {
     // Build tools
-    DotNetCoreRestore("GtkSharp/Source/Tools/Tools.sln");
-    DotNetCoreBuild("GtkSharp/Source/Tools/Tools.sln", new DotNetCoreBuildSettings {
+    DotNetCoreRestore("Source/Tools/gapi/Gapi.sln");
+    DotNetCoreBuild("Source/Tools/gapi/Gapi.sln", new DotNetCoreBuildSettings {
         Verbosity = DotNetCoreVerbosity.Minimal,
-        Configuration = "Release",
+        Configuration = configuration,
         OutputDirectory = "BuildOutput/Tools"
     });
 
@@ -82,7 +83,7 @@ Task("Build")
 {
     var settings = new DotNetCoreBuildSettings
     {
-        Configuration = "Release",
+        Configuration = configuration,
         MSBuildSettings = msbuildsettings
     };
 
@@ -102,10 +103,9 @@ Task("PackageNuGet")
     var settings = new DotNetCorePackSettings
     {
         MSBuildSettings = msbuildsettings,
-        Configuration = "Release",
+        Configuration = configuration,
         OutputDirectory = "BuildOutput/NugetPackages",
-        NoBuild = true,
-
+        NoBuild = true
     };
 
     foreach(var gassembly in list)
