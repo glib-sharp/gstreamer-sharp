@@ -1,4 +1,8 @@
-build/
+## Add custom content for this repo bellow this
+
+BuildOutput/
+Generated/
+
 subprojects/
 
 ## Ignore Visual Studio temporary files, build results, and
@@ -289,8 +293,8 @@ __pycache__/
 *.pyc
 
 # Cake - Uncomment if you are using it
-# tools/**
-# !tools/packages.config
+tools/**
+!tools/packages.config
 
 # Tabs Studio
 *.tss
