@@ -11,9 +11,20 @@
         <OutputPath>..\..\..\BuildOutput\Release</OutputPath>
     </PropertyGroup>
     <ItemGroup>
-        <Content Include="linux-x86\*" PackagePath="runtimes\linux-x86\native" Visible="false" />
-        <Content Include="linux-x64\*" PackagePath="runtimes\linux-x64\native" Visible="false" />
-        <Content Include="linux-arm\*" PackagePath="runtimes\linux-arm\native" Visible="false" />
+      <Compile Remove="linux-arm\**" />
+      <Compile Remove="linux-x64\**" />
+      <Compile Remove="linux-x86\**" />
+      <EmbeddedResource Remove="linux-arm\**" />
+      <EmbeddedResource Remove="linux-x64\**" />
+      <EmbeddedResource Remove="linux-x86\**" />
+      <None Remove="linux-arm\**" />
+      <None Remove="linux-x64\**" />
+      <None Remove="linux-x86\**" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Remove="Generated\GstSharp-api.xml" />
+      <None Remove="GstSharp-api.raw" />
+      <None Remove="GstSharp.metadata" />
     </ItemGroup>
     <ItemGroup>
       <PackageReference Include="GioSharp" Version="3.22.24.10" />
