@@ -42,16 +42,18 @@ public class GAssembly
             // Fixup API file
             var tempapi = Path.Combine(GDir, Name + "-api.xml");
             var symfile = Path.Combine(Dir, Name + "-symbols.xml");
+
             Cake.CopyFile(RawApi, tempapi);
-            Cake.DotNetCoreExecute("BuildOutput/Tools/GapiFixup.dll", 
-                "--metadata=" + Metadata + " " + "--api=" + tempapi + 
+            
+            Cake.DotNetCoreExecute("BuildOutput/Tools/GapiFixup.dll",
+                "--metadata=" + Metadata + " " + "--api=" + tempapi +
                 (Cake.FileExists(symfile) ? " --symbols=" + symfile : string.Empty)
             );
 
             var extraargs = ExtraArgs + " ";
 
             // Locate APIs to include
-            foreach(var dep in Deps)
+            foreach (var dep in Deps)
             {
                 var ipath = Path.Combine("Source", "Libs", dep, dep + "-api.xml");
 
@@ -63,7 +65,7 @@ public class GAssembly
             }
 
             // Generate code
-            Cake.DotNetCoreExecute("BuildOutput/Tools/GapiCodegen.dll", 
+            Cake.DotNetCoreExecute("BuildOutput/Tools/GapiCodegen.dll",
                 "--outdir=" + GDir + " " +
                 "--schema=Source/Libs/Gapi.xsd " +
                 extraargs + " " +
@@ -73,12 +75,6 @@ public class GAssembly
         }
 
         Init = true;
-    }
-
-    public void Clean()
-    {
-        if (Cake.DirectoryExists(GDir))
-            Cake.DeleteDirectory(GDir, new DeleteDirectorySettings { Recursive = true, Force = true });
     }
 
     public void GenerateLinuxStubs()
@@ -111,5 +107,11 @@ public class GAssembly
             Cake.StartProcess("arm-none-eabi-gcc", "-shared -o " + NativeDeps[i] + " empty.c");
             Cake.StartProcess("arm-none-eabi-gcc", "-Wl,--no-as-needed -shared -o " + Path.Combine(basedir, "linux-arm", NativeDeps[i + 1] + ".so") + " -fPIC -L. -l:" + NativeDeps[i] + "");
         }
+    }
+
+    public void Clean()
+    {
+        if (Cake.DirectoryExists(GDir))
+            Cake.DeleteDirectory(GDir, new DeleteDirectorySettings { Recursive = true, Force = true });
     }
 }
