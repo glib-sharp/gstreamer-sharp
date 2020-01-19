@@ -31,6 +31,21 @@ Task("Init")
             list.Add(gassembly);
 });
 
+Task("Clean")
+    .IsDependentOn("Init")
+    .Does(() =>
+{
+    foreach(var gassembly in list)
+        gassembly.Clean();
+});
+
+Task("FullClean")
+    .IsDependentOn("Clean")
+    .Does(() =>
+{
+    DeleteDirectory("BuildOutput", true);
+});
+
 Task("Prepare")
     .IsDependentOn("Clean")
     .Does(() =>
@@ -46,6 +61,7 @@ Task("Prepare")
     // Generate code and prepare libs projects
     foreach(var gassembly in list)
         gassembly.Prepare();
+        
     DotNetCoreRestore("Source/Libs/GstSharp.sln");
 });
 
@@ -60,21 +76,6 @@ Task("GenerateLinuxStubs")
         gassembly.GenerateLinuxStubs();
     System.IO.Directory.SetCurrentDirectory("../..");
     DeleteDirectory("BuildOutput/LinuxStubs", new DeleteDirectorySettings { Recursive = true, Force = true });
-});
-
-Task("Clean")
-    .IsDependentOn("Init")
-    .Does(() =>
-{
-    foreach(var gassembly in list)
-        gassembly.Clean();
-});
-
-Task("FullClean")
-    .IsDependentOn("Clean")
-    .Does(() =>
-{
-    DeleteDirectory("BuildOutput", true);
 });
 
 Task("Build")
