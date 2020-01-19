@@ -2,7 +2,7 @@
 using GLib;
 using Gst;
 
-namespace Samples0
+namespace Samples
 {
     class Program
     {

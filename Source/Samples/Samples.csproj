@@ -3,15 +3,11 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>netcoreapp2.2</TargetFramework>
-        <RootNamespace>Samples0</RootNamespace>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Libs\GstSharp\GstSharp.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Compile Remove="Program.cs" />
+        <ProjectReference Include="..\Libs\GstSharp\GstSharp.csproj"/>
     </ItemGroup>
 
 </Project>

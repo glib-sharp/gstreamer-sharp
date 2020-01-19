@@ -5,7 +5,7 @@ using System;
 using Gst;
 using Gst.PbUtils;
 
-namespace Samples0
+namespace Samples
 {
 	class Playback
 	{

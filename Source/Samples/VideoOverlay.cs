@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 using Gst;
 using Gst.Video;
 
-namespace Samples0
+namespace Samples
 {
 	public class MainWindow : Gtk.Window {
 		DrawingArea _da;

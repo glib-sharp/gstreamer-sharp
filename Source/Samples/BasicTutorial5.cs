@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using Gst;
 using Gst.Video;
 
-namespace Samples0
+namespace Samples
 {
 	class Playback
 	{

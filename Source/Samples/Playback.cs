@@ -15,7 +15,7 @@
 
 using Gst;
 
-namespace Samples0
+namespace Samples
 {
 	class Playback
 	{
