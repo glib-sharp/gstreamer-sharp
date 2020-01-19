@@ -2,11 +2,10 @@
 //   Copyright (C) 2014 Stephan Sundermann <stephansundermann@gmail.com>
 
 using System;
-using Gst;
-using System.Runtime.InteropServices;
 using System.Text;
+using Gst;
 
-namespace GstreamerSharp
+namespace Samples0
 {
 	class Playback
 	{

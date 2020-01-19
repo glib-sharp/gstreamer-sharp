@@ -19,9 +19,8 @@
 
 using System;
 using Gst;
-using System.Diagnostics;
 
-namespace GESSharp
+namespace Samples0
 {
     class GESExample
     {

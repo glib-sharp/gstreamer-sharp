@@ -1,10 +1,9 @@
 // Authors
 //   Copyright (C) 2014 Stephan Sundermann <stephansundermann@gmail.com>
 
-using System;
-using Gst; 
+using Gst;
 
-namespace GstreamerSharp
+namespace Samples0
 {
 	class Playback
 	{

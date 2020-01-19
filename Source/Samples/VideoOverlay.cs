@@ -4,15 +4,11 @@
 //   Copyright (C) 2013 Stephan Sundermann <stephansundermann@gmail.com>
 
 using System;
-using System;
 using System.Runtime.InteropServices;
-
-using Gtk;
 using Gst;
 using Gst.Video;
-using Gst.Base;
 
-namespace Gstreameroverlay
+namespace Samples0
 {
 	public class MainWindow : Gtk.Window {
 		DrawingArea _da;

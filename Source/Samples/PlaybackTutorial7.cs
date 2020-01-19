@@ -3,10 +3,8 @@
 
 using System;
 using Gst;
-using System.Runtime.InteropServices;
-using System.Text;
 
-namespace GstreamerSharp
+namespace Samples0
 {
 	class Playback
 	{

@@ -1,13 +1,8 @@
-﻿using GLib;
+﻿using System;
+using GLib;
 using Gst;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text;
 
-namespace GstreamerSharp
+namespace Samples0
 {
     class Program
     {
