@@ -1,5 +1,5 @@
-#load CakeScripts\GAssembly.cs
-#load CakeScripts\Settings.cs
+#load CakeScripts\GAssembly.cake
+#load CakeScripts\Settings.cake
 #addin "Cake.FileHelpers"
 #addin "Cake.Incubator"
 
@@ -71,10 +71,14 @@ Task("GenerateLinuxStubs")
 {
     CreateDirectory("BuildOutput/LinuxStubs");
     System.IO.Directory.SetCurrentDirectory("BuildOutput/LinuxStubs");
+    
     FileWriteText("empty.c", "");
+
     foreach(var gassembly in list)
         gassembly.GenerateLinuxStubs();
+
     System.IO.Directory.SetCurrentDirectory("../..");
+
     DeleteDirectory("BuildOutput/LinuxStubs", new DeleteDirectorySettings { Recursive = true, Force = true });
 });
 

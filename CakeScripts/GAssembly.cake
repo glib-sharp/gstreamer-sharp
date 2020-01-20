@@ -1,3 +1,5 @@
+#load Settings.cake
+
 using System;
 using P = System.IO.Path;
 
@@ -27,9 +29,9 @@ public class GAssembly
         GDir = P.Combine(Dir, "Generated");
 
         var temppath = P.Combine(Dir, name);
-        Csproj = temppath + ".csproj";
-        RawApi = temppath + "-api.raw";
-        Metadata = temppath + ".metadata";
+        Csproj = $"{temppath}.csproj";
+        RawApi = $"{temppath}-api.raw";
+        Metadata = $"{temppath}.metadata";
     }
 
     public void Prepare()
@@ -40,37 +42,32 @@ public class GAssembly
         if (Cake.FileExists(RawApi))
         {
             // Fixup API file
-            var tempapi = P.Combine(GDir, Name + "-api.xml");
-            var symfile = P.Combine(Dir, Name + "-symbols.xml");
+            var tempapi = P.Combine(GDir, $"{Name}-api.xml");
+            var symfile = P.Combine(Dir, $"{Name}-symbols.xml");
 
             Cake.CopyFile(RawApi, tempapi);
 
             Cake.DotNetCoreExecute("BuildOutput/Tools/GapiFixup.dll",
-                "--metadata=" + Metadata + " " + "--api=" + tempapi +
-                (Cake.FileExists(symfile) ? " --symbols=" + symfile : string.Empty)
+                $"--metadata={Metadata} --api={tempapi}{(Cake.FileExists(symfile) ? $" --symbols={symfile}" : string.Empty)}"
             );
 
-            var extraargs = ExtraArgs + " ";
+            var extraargs = $"{ExtraArgs} ";
 
             // Locate APIs to include
             foreach (var dep in Deps)
             {
-                var ipath = P.Combine("Source", "Libs", dep, dep + "-api.xml");
+                var ipath = P.Combine("Source", "Libs", dep, $"{dep}-api.xml");
 
                 if (!Cake.FileExists(ipath))
-                    ipath = P.Combine("Source", "Libs", dep, "Generated", dep + "-api.xml");
+                    ipath = P.Combine("Source", "Libs", dep, "Generated", $"{dep}-api.xml");
 
                 if (Cake.FileExists(ipath))
-                    extraargs += " --include=" + ipath + " ";
+                    extraargs += $" --include={ipath} ";
             }
 
             // Generate code
             Cake.DotNetCoreExecute("BuildOutput/Tools/GapiCodegen.dll",
-                "--outdir=" + GDir + " " +
-                "--schema=BuildOutput/Tools/Gapi.xsd " +
-                extraargs + " " +
-                "--assembly-name=" + Name + " " +
-                "--generate=" + tempapi
+                $"--outdir={GDir} --schema=BuildOutput/Tools/Gapi.xsd {extraargs} --assembly-name={Name} --generate={tempapi}"
             );
         }
 
@@ -82,29 +79,41 @@ public class GAssembly
         var basedir = P.Combine("..", "..", Dir);
 
         if (Cake.DirectoryExists(P.Combine(basedir, "linux-x86")))
-            Cake.DeleteDirectory(P.Combine(basedir, "linux-x86"), new DeleteDirectorySettings { Recursive = true, Force = true });
+        {
+            Cake.DeleteDirectory(P.Combine(basedir, "linux-x86"), 
+            new DeleteDirectorySettings { Recursive = true, Force = true });
+        }
+        
         Cake.CreateDirectory(P.Combine(basedir, "linux-x86"));
 
         if (Cake.DirectoryExists(P.Combine(basedir, "linux-x64")))
-            Cake.DeleteDirectory(P.Combine(basedir, "linux-x64"), new DeleteDirectorySettings { Recursive = true, Force = true });
+        {
+            Cake.DeleteDirectory(P.Combine(basedir, "linux-x64"), 
+            new DeleteDirectorySettings { Recursive = true, Force = true });
+        }
+            
         Cake.CreateDirectory(P.Combine(basedir, "linux-x64"));
 
         if (Cake.DirectoryExists(P.Combine(basedir, "linux-arm")))
-            Cake.DeleteDirectory(P.Combine(basedir, "linux-arm"), new DeleteDirectorySettings { Recursive = true, Force = true });
+        {
+            Cake.DeleteDirectory(P.Combine(basedir, "linux-arm"),
+            new DeleteDirectorySettings { Recursive = true, Force = true });
+        }
+            
         Cake.CreateDirectory(P.Combine(basedir, "linux-arm"));
 
         for (int i = 0; i < NativeDeps.Length; i += 2)
         {
             // Generate x86 stubs
-            Cake.StartProcess("gcc", "-m32 -shared -o " + NativeDeps[i] + " empty.c");
+            Cake.StartProcess("gcc", $"-m32 -shared -o {NativeDeps[i]} empty.c");
             Cake.StartProcess("gcc", "-m32 -Wl,--no-as-needed -shared -o " + P.Combine(basedir, "linux-x86", NativeDeps[i + 1] + ".so") + " -fPIC -L. -l:" + NativeDeps[i] + "");
 
             // Generate x64 stubs
-            Cake.StartProcess("gcc", "-shared -o " + NativeDeps[i] + " empty.c");
+            Cake.StartProcess("gcc", $"-shared -o {NativeDeps[i]} empty.c");
             Cake.StartProcess("gcc", "-Wl,--no-as-needed -shared -o " + P.Combine(basedir, "linux-x64", NativeDeps[i + 1] + ".so") + " -fPIC -L. -l:" + NativeDeps[i] + "");
 
             // Generate arm stubs
-            Cake.StartProcess("arm-none-eabi-gcc", "-shared -o " + NativeDeps[i] + " empty.c");
+            Cake.StartProcess("arm-none-eabi-gcc", $"-shared -o {NativeDeps[i]} empty.c");
             Cake.StartProcess("arm-none-eabi-gcc", "-Wl,--no-as-needed -shared -o " + P.Combine(basedir, "linux-arm", NativeDeps[i + 1] + ".so") + " -fPIC -L. -l:" + NativeDeps[i] + "");
         }
     }
