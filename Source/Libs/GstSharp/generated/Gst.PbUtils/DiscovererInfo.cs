@@ -18,7 +18,7 @@ namespace Gst.PbUtils {
 			CreateNativeObject (new string [0], new GLib.Value [0]);
 		}
 
-		[DllImport("libgstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_discoverer_info_get_type();
 
 		public static new GLib.GType GType { 
@@ -29,7 +29,7 @@ namespace Gst.PbUtils {
 			}
 		}
 
-		[DllImport("libgstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_discoverer_info_from_variant(IntPtr variant);
 
 		public static Gst.PbUtils.DiscovererInfo FromVariant(GLib.Variant variant) {
@@ -38,7 +38,7 @@ namespace Gst.PbUtils {
 			return ret;
 		}
 
-		[DllImport("libgstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_discoverer_info_copy(IntPtr raw);
 
 		public Gst.PbUtils.DiscovererInfo Copy() {
@@ -47,7 +47,7 @@ namespace Gst.PbUtils {
 			return ret;
 		}
 
-		[DllImport("libgstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_discoverer_info_get_audio_streams(IntPtr raw);
 
 		public Gst.PbUtils.DiscovererStreamInfo[] AudioStreams { 
@@ -58,7 +58,7 @@ namespace Gst.PbUtils {
 			}
 		}
 
-		[DllImport("libgstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_discoverer_info_get_container_streams(IntPtr raw);
 
 		public Gst.PbUtils.DiscovererStreamInfo[] ContainerStreams { 
@@ -69,7 +69,7 @@ namespace Gst.PbUtils {
 			}
 		}
 
-		[DllImport("libgstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern ulong gst_discoverer_info_get_duration(IntPtr raw);
 
 		public ulong Duration { 
@@ -80,7 +80,18 @@ namespace Gst.PbUtils {
 			}
 		}
 
-		[DllImport("libgstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		static extern bool gst_discoverer_info_get_live(IntPtr raw);
+
+		public bool Live { 
+			get {
+				bool raw_ret = gst_discoverer_info_get_live(Handle);
+				bool ret = raw_ret;
+				return ret;
+			}
+		}
+
+		[DllImport("gstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_discoverer_info_get_misc(IntPtr raw);
 
 		[Obsolete]
@@ -92,7 +103,7 @@ namespace Gst.PbUtils {
 			}
 		}
 
-		[DllImport("libgstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_discoverer_info_get_missing_elements_installer_details(IntPtr raw);
 
 		public string[] MissingElementsInstallerDetails { 
@@ -103,7 +114,7 @@ namespace Gst.PbUtils {
 			}
 		}
 
-		[DllImport("libgstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_discoverer_info_get_result(IntPtr raw);
 
 		public Gst.PbUtils.DiscovererResult Result { 
@@ -114,7 +125,7 @@ namespace Gst.PbUtils {
 			}
 		}
 
-		[DllImport("libgstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern bool gst_discoverer_info_get_seekable(IntPtr raw);
 
 		public bool Seekable { 
@@ -125,7 +136,7 @@ namespace Gst.PbUtils {
 			}
 		}
 
-		[DllImport("libgstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_discoverer_info_get_stream_info(IntPtr raw);
 
 		public Gst.PbUtils.DiscovererStreamInfo StreamInfo { 
@@ -136,7 +147,7 @@ namespace Gst.PbUtils {
 			}
 		}
 
-		[DllImport("libgstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_discoverer_info_get_stream_list(IntPtr raw);
 
 		public Gst.PbUtils.DiscovererStreamInfo[] StreamList { 
@@ -147,7 +158,7 @@ namespace Gst.PbUtils {
 			}
 		}
 
-		[DllImport("libgstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_discoverer_info_get_streams(IntPtr raw, IntPtr streamtype);
 
 		public Gst.PbUtils.DiscovererStreamInfo[] GetStreams(GLib.GType streamtype) {
@@ -156,7 +167,7 @@ namespace Gst.PbUtils {
 			return ret;
 		}
 
-		[DllImport("libgstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_discoverer_info_get_subtitle_streams(IntPtr raw);
 
 		public Gst.PbUtils.DiscovererStreamInfo[] SubtitleStreams { 
@@ -167,7 +178,7 @@ namespace Gst.PbUtils {
 			}
 		}
 
-		[DllImport("libgstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_discoverer_info_get_tags(IntPtr raw);
 
 		public Gst.TagList Tags { 
@@ -178,7 +189,7 @@ namespace Gst.PbUtils {
 			}
 		}
 
-		[DllImport("libgstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_discoverer_info_get_toc(IntPtr raw);
 
 		public Gst.Toc Toc { 
@@ -189,7 +200,7 @@ namespace Gst.PbUtils {
 			}
 		}
 
-		[DllImport("libgstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_discoverer_info_get_uri(IntPtr raw);
 
 		public string Uri { 
@@ -200,7 +211,7 @@ namespace Gst.PbUtils {
 			}
 		}
 
-		[DllImport("libgstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_discoverer_info_get_video_streams(IntPtr raw);
 
 		public Gst.PbUtils.DiscovererStreamInfo[] VideoStreams { 
@@ -211,7 +222,7 @@ namespace Gst.PbUtils {
 			}
 		}
 
-		[DllImport("libgstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_discoverer_info_to_variant(IntPtr raw, int flags);
 
 		public GLib.Variant ToVariant(Gst.PbUtils.DiscovererSerializeFlags flags) {
@@ -223,7 +234,7 @@ namespace Gst.PbUtils {
 
 		static DiscovererInfo ()
 		{
-			GtkSharp.GstSharp.ObjectManager.Initialize ();
+			GtkSharp.GstreamerSharp.ObjectManager.Initialize ();
 		}
 #endregion
 	}

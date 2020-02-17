@@ -16,6 +16,10 @@ namespace Gst.PbUtils {
 		public const string ENCODING_CATEGORY_FILE_EXTENSION = @"file-extension";
 		public const string ENCODING_CATEGORY_ONLINE_SERVICE = @"online-service";
 		public const string ENCODING_CATEGORY_STORAGE_EDITING = @"storage-editing";
+		public const int PLUGINS_BASE_VERSION_MAJOR = 1;
+		public const int PLUGINS_BASE_VERSION_MICRO = 0;
+		public const int PLUGINS_BASE_VERSION_MINOR = 17;
+		public const int PLUGINS_BASE_VERSION_NANO = 1;
 #endregion
 	}
 }

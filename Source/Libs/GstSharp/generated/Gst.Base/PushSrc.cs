@@ -240,7 +240,7 @@ namespace Gst.Base {
 
 		// End of the ABI representation.
 
-		[DllImport("libgstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_push_src_get_type();
 
 		public static new GLib.GType GType { 
@@ -254,7 +254,7 @@ namespace Gst.Base {
 
 		static PushSrc ()
 		{
-			GtkSharp.GstSharp.ObjectManager.Initialize ();
+			GtkSharp.GstreamerSharp.ObjectManager.Initialize ();
 		}
 
 		// Internal representation of the wrapped structure ABI.

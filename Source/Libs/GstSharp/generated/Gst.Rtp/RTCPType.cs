@@ -18,10 +18,11 @@ namespace Gst.Rtp {
 		App = 204,
 		Rtpfb = 205,
 		Psfb = 206,
+		Xr = 207,
 	}
 
 	internal class RTCPTypeGType {
-		[DllImport ("libgstrtp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport ("gstrtp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_rtcp_type_get_type ();
 
 		public static GLib.GType GType {

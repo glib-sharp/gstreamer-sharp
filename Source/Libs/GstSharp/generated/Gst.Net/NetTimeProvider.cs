@@ -13,7 +13,7 @@ namespace Gst.Net {
 
 		public NetTimeProvider (IntPtr raw) : base(raw) {}
 
-		[DllImport("libgstnet-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstnet-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_net_time_provider_new(IntPtr clock, IntPtr address, int port);
 
 		public NetTimeProvider (Gst.Clock clock, string address, int port) : base (IntPtr.Zero)
@@ -82,6 +82,21 @@ namespace Gst.Net {
 			}
 		}
 
+		[GLib.Property ("qos-dscp")]
+		public int QosDscp {
+			get {
+				GLib.Value val = GetProperty ("qos-dscp");
+				int ret = (int) val;
+				val.Dispose ();
+				return ret;
+			}
+			set {
+				GLib.Value val = new GLib.Value(value);
+				SetProperty("qos-dscp", val);
+				val.Dispose ();
+			}
+		}
+
 
 		// Internal representation of the wrapped structure ABI.
 		static GLib.AbiStruct _class_abi = null;
@@ -106,7 +121,7 @@ namespace Gst.Net {
 
 		// End of the ABI representation.
 
-		[DllImport("libgstnet-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstnet-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_net_time_provider_get_type();
 
 		public static new GLib.GType GType { 
@@ -117,7 +132,7 @@ namespace Gst.Net {
 			}
 		}
 
-		[DllImport("libgio-2.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gio-2.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern bool g_initable_init(IntPtr raw, IntPtr cancellable, out IntPtr error);
 
 		public bool Init(GLib.Cancellable cancellable) {
@@ -131,7 +146,7 @@ namespace Gst.Net {
 
 		static NetTimeProvider ()
 		{
-			GtkSharp.GstSharp.ObjectManager.Initialize ();
+			GtkSharp.GstreamerSharp.ObjectManager.Initialize ();
 		}
 
 		// Internal representation of the wrapped structure ABI.

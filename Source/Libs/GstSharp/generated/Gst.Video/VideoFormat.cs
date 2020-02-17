@@ -88,10 +88,18 @@ namespace Gst.Video {
 		I42212le = 75,
 		Y44412be = 76,
 		Y44412le = 77,
+		Gray10Le32 = 78,
+		Nv1210le32 = 79,
+		Nv1610le32 = 80,
+		Nv1210le40 = 81,
+		Y210 = 82,
+		Y410 = 83,
+		Vuya = 84,
+		Bgr10a2Le = 85,
 	}
 
 	internal class VideoFormatGType {
-		[DllImport ("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport ("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_video_format_get_type ();
 
 		public static GLib.GType GType {

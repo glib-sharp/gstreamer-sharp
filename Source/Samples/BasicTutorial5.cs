@@ -180,7 +180,7 @@ namespace Samples
 		static void HandleTags (object sender, GLib.SignalArgs args) {
 			// We are possibly in the Gstreamer working thread, so we notify the main thread of this event through a message in the bus
 			var s = new Structure ("tags-changed");
-			Playbin.PostMessage (new Message (Playbin, s));
+			Playbin.PostMessage (Message.NewApplication (Playbin, s));
 		}
 
 		// This function is called when an error message is posted on the bus
@@ -357,7 +357,7 @@ namespace Samples
 		[DllImport ("libgdk-3.so.0") ]
 		static extern IntPtr gdk_x11_window_get_xid (IntPtr handle);
 
-		[DllImport ("libgdk-win32-3.0-0.dll") ]
+		[DllImport ("gdk-win32-3.0-0.dll") ]
 		static extern IntPtr gdk_win32_drawable_get_handle (IntPtr handle);
 
 		[DllImport ("libX11.so.6")]

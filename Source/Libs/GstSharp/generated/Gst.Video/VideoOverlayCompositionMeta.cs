@@ -14,9 +14,13 @@ namespace Gst.Video {
 
 		public Gst.Meta Meta;
 		private IntPtr _overlay;
-
-		public Gst.Video.VideoOverlayComposition overlay {
-			get { return Gst.Video.VideoOverlayComposition.New (_overlay); }
+		public Gst.Video.VideoOverlayComposition Overlay {
+			get {
+				return _overlay == IntPtr.Zero ? null : (Gst.Video.VideoOverlayComposition) GLib.Opaque.GetOpaque (_overlay, typeof (Gst.Video.VideoOverlayComposition), false);
+			}
+			set {
+				_overlay = value == null ? IntPtr.Zero : value.Handle;
+			}
 		}
 
 		public static Gst.Video.VideoOverlayCompositionMeta Zero = new Gst.Video.VideoOverlayCompositionMeta ();
@@ -27,7 +31,7 @@ namespace Gst.Video {
 			return (Gst.Video.VideoOverlayCompositionMeta) Marshal.PtrToStructure (raw, typeof (Gst.Video.VideoOverlayCompositionMeta));
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_video_overlay_composition_meta_get_info();
 
 		public static Gst.MetaInfo Info { 
@@ -40,7 +44,7 @@ namespace Gst.Video {
 
 		public bool Equals (VideoOverlayCompositionMeta other)
 		{
-			return true && Meta.Equals (other.Meta) && overlay.Equals (other.overlay);
+			return true && Meta.Equals (other.Meta) && Overlay.Equals (other.Overlay);
 		}
 
 		public override bool Equals (object other)
@@ -50,7 +54,7 @@ namespace Gst.Video {
 
 		public override int GetHashCode ()
 		{
-			return this.GetType ().FullName.GetHashCode () ^ Meta.GetHashCode () ^ overlay.GetHashCode ();
+			return this.GetType ().FullName.GetHashCode () ^ Meta.GetHashCode () ^ Overlay.GetHashCode ();
 		}
 
 		private static GLib.GType GType {

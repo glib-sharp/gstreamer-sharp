@@ -133,6 +133,66 @@ namespace Gst.PbUtils {
 			return __result;
 		}
 
+		static RenderNativeDelegate Render_cb_delegate;
+		static RenderNativeDelegate RenderVMCallback {
+			get {
+				if (Render_cb_delegate == null)
+					Render_cb_delegate = new RenderNativeDelegate (Render_cb);
+				return Render_cb_delegate;
+			}
+		}
+
+		static void OverrideRender (GLib.GType gtype)
+		{
+			OverrideRender (gtype, RenderVMCallback);
+		}
+
+		static void OverrideRender (GLib.GType gtype, RenderNativeDelegate callback)
+		{
+			unsafe {
+				IntPtr* raw_ptr = (IntPtr*)(((long) gtype.GetClassPtr()) + (long) class_abi.GetFieldOffset("render"));
+				*raw_ptr = Marshal.GetFunctionPointerForDelegate((Delegate) callback);
+			}
+		}
+
+		[UnmanagedFunctionPointer (CallingConvention.Cdecl)]
+		delegate bool RenderNativeDelegate (IntPtr inst, IntPtr audio, IntPtr video);
+
+		static bool Render_cb (IntPtr inst, IntPtr audio, IntPtr video)
+		{
+			try {
+				AudioVisualizer __obj = GLib.Object.GetObject (inst, false) as AudioVisualizer;
+				bool __result;
+				__result = __obj.OnRender (audio == IntPtr.Zero ? null : (Gst.Buffer) GLib.Opaque.GetOpaque (audio, typeof (Gst.Buffer), false), Gst.Video.VideoFrame.New (video));
+				return __result;
+			} catch (Exception e) {
+				GLib.ExceptionManager.RaiseUnhandledException (e, true);
+				// NOTREACHED: above call does not return.
+				throw e;
+			}
+		}
+
+		[GLib.DefaultSignalHandler(Type=typeof(Gst.PbUtils.AudioVisualizer), ConnectionMethod="OverrideRender")]
+		protected virtual bool OnRender (Gst.Buffer audio, Gst.Video.VideoFrame video)
+		{
+			return InternalRender (audio, video);
+		}
+
+		private bool InternalRender (Gst.Buffer audio, Gst.Video.VideoFrame video)
+		{
+			RenderNativeDelegate unmanaged = null;
+			unsafe {
+				IntPtr* raw_ptr = (IntPtr*)(((long) this.LookupGType().GetThresholdType().GetClassPtr()) + (long) class_abi.GetFieldOffset("render"));
+				unmanaged = (RenderNativeDelegate) Marshal.GetDelegateForFunctionPointer(*raw_ptr, typeof(RenderNativeDelegate));
+			}
+			if (unmanaged == null) return false;
+
+			IntPtr native_video = GLib.Marshaller.StructureToPtrAlloc (video);
+			bool __result = unmanaged (this.Handle, audio == null ? IntPtr.Zero : audio.Handle, native_video);
+			Marshal.FreeHGlobal (native_video);
+			return __result;
+		}
+
 		static DecideAllocationNativeDelegate DecideAllocation_cb_delegate;
 		static DecideAllocationNativeDelegate DecideAllocationVMCallback {
 			get {
@@ -231,7 +291,7 @@ namespace Gst.PbUtils {
 
 		// End of the ABI representation.
 
-		[DllImport("libgstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_audio_visualizer_get_type();
 
 		public static new GLib.GType GType { 
@@ -245,7 +305,7 @@ namespace Gst.PbUtils {
 
 		static AudioVisualizer ()
 		{
-			GtkSharp.GstSharp.ObjectManager.Initialize ();
+			GtkSharp.GstreamerSharp.ObjectManager.Initialize ();
 		}
 
 		// Internal representation of the wrapped structure ABI.

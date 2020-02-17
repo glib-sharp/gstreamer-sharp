@@ -13,10 +13,11 @@ namespace Gst.Rtsp {
 		Invalid = 0,
 		_110 = 16,
 		_111 = 17,
+		_220 = 32,
 	}
 
 	internal class RTSPVersionGType {
-		[DllImport ("libgstrtsp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport ("gstrtsp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_rtsp_version_get_type ();
 
 		public static GLib.GType GType {

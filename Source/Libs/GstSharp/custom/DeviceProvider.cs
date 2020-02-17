@@ -27,7 +27,7 @@ namespace Gst {
 
 	partial class DeviceProvider 
 	{
-		[DllImport("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_device_provider_class_add_metadata(IntPtr klass, IntPtr key, IntPtr value);
 
 		public void AddMetadata(string key, string value) {
@@ -38,16 +38,19 @@ namespace Gst {
 			GLib.Marshaller.Free (native_value);
 		}
 
-		[DllImport("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_device_provider_class_add_static_metadata(IntPtr klass, IntPtr key, IntPtr value);
 
 		public void AddStaticMetadata(string key, string value) {
 			IntPtr native_key = GLib.Marshaller.StringToPtrGStrdup (key);
-			gst_device_provider_class_add_static_metadata(LookupGType().GetClassPtr (), native_key, GLib.Marshaller.StringToPtrGStrdup(value));
+			IntPtr native_value = GLib.Marshaller.StringToPtrGStrdup (value);
+			gst_device_provider_class_add_static_metadata(LookupGType().GetClassPtr (), native_key, native_value);
+
 			GLib.Marshaller.Free (native_key);
+			GLib.Marshaller.Free (native_value);
 		}
 
-		[DllImport("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_device_provider_class_set_metadata(IntPtr klass, IntPtr longname, IntPtr classification, IntPtr description, IntPtr author);
 
 		public void SetMetadata(string longname, string classification, string description, string author) {
@@ -62,11 +65,21 @@ namespace Gst {
 			GLib.Marshaller.Free (native_author);
 		}
 
-		[DllImport("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_device_provider_class_set_static_metadata(IntPtr klass, IntPtr longname, IntPtr classification, IntPtr description, IntPtr author);
 
 		public void SetStaticMetadata(string longname, string classification, string description, string author) {
-			gst_device_provider_class_set_static_metadata(LookupGType().GetClassPtr (), GLib.Marshaller.StringToPtrGStrdup(longname), GLib.Marshaller.StringToPtrGStrdup(classification), GLib.Marshaller.StringToPtrGStrdup(description), GLib.Marshaller.StringToPtrGStrdup(author));
+			IntPtr native_longname = GLib.Marshaller.StringToPtrGStrdup (longname);
+			IntPtr native_classification = GLib.Marshaller.StringToPtrGStrdup (classification);
+			IntPtr native_description = GLib.Marshaller.StringToPtrGStrdup (description);
+			IntPtr native_author = GLib.Marshaller.StringToPtrGStrdup (author);
+
+			gst_device_provider_class_set_static_metadata(LookupGType().GetClassPtr (), native_longname, native_classification, native_description, native_author);
+
+			GLib.Marshaller.Free (native_longname);
+			GLib.Marshaller.Free (native_classification);
+			GLib.Marshaller.Free (native_description);
+			GLib.Marshaller.Free (native_author);
 		}
 
 

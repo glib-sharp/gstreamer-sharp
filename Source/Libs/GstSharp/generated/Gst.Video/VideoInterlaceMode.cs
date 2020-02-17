@@ -14,10 +14,11 @@ namespace Gst.Video {
 		Interleaved = 1,
 		Mixed = 2,
 		Fields = 3,
+		Alternate = 4,
 	}
 
 	internal class VideoInterlaceModeGType {
-		[DllImport ("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport ("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_video_interlace_mode_get_type ();
 
 		public static GLib.GType GType {

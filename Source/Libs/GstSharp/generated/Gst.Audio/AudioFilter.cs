@@ -117,14 +117,14 @@ namespace Gst.Audio {
 
 		// End of the ABI representation.
 
-		[DllImport("libgstaudio-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstaudio-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_audio_filter_class_add_pad_templates(IntPtr allowed_caps);
 
 		public static void AddAudioPadTemplate(Gst.Caps allowed_caps) {
 			gst_audio_filter_class_add_pad_templates(allowed_caps == null ? IntPtr.Zero : allowed_caps.Handle);
 		}
 
-		[DllImport("libgstaudio-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstaudio-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_audio_filter_get_type();
 
 		public static new GLib.GType GType { 
@@ -138,7 +138,7 @@ namespace Gst.Audio {
 
 		static AudioFilter ()
 		{
-			GtkSharp.GstSharp.ObjectManager.Initialize ();
+			GtkSharp.GstreamerSharp.ObjectManager.Initialize ();
 		}
 
 		// Internal representation of the wrapped structure ABI.

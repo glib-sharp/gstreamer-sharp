@@ -18,6 +18,21 @@ namespace Gst.Video {
 			CreateNativeObject (new string [0], new GLib.Value [0]);
 		}
 
+		[GLib.Property ("qos")]
+		public bool Qos {
+			get {
+				GLib.Value val = GetProperty ("qos");
+				bool ret = (bool) val;
+				val.Dispose ();
+				return ret;
+			}
+			set {
+				GLib.Value val = new GLib.Value(value);
+				SetProperty("qos", val);
+				val.Dispose ();
+			}
+		}
+
 		static OpenNativeDelegate Open_cb_delegate;
 		static OpenNativeDelegate OpenVMCallback {
 			get {
@@ -1306,7 +1321,7 @@ namespace Gst.Video {
 
 		// End of the ABI representation.
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_video_encoder_get_type();
 
 		public static new GLib.GType GType { 
@@ -1317,7 +1332,7 @@ namespace Gst.Video {
 			}
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_video_encoder_allocate_output_buffer(IntPtr raw, UIntPtr size);
 
 		public Gst.Buffer AllocateOutputBuffer(ulong size) {
@@ -1326,7 +1341,7 @@ namespace Gst.Video {
 			return ret;
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_video_encoder_allocate_output_frame(IntPtr raw, IntPtr frame, UIntPtr size);
 
 		public Gst.FlowReturn AllocateOutputFrame(Gst.Video.VideoCodecFrame frame, ulong size) {
@@ -1337,7 +1352,7 @@ namespace Gst.Video {
 			return ret;
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_video_encoder_finish_frame(IntPtr raw, IntPtr frame);
 
 		public Gst.FlowReturn FinishFrame(Gst.Video.VideoCodecFrame frame) {
@@ -1348,7 +1363,7 @@ namespace Gst.Video {
 			return ret;
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_video_encoder_get_allocator(IntPtr raw, out IntPtr allocator, IntPtr parms);
 
 		public void GetAllocator(out Gst.Allocator allocator, out Gst.AllocationParams parms) {
@@ -1360,7 +1375,7 @@ namespace Gst.Video {
 			Marshal.FreeHGlobal (native_parms);
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_video_encoder_get_frame(IntPtr raw, int frame_number);
 
 		public Gst.Video.VideoCodecFrame GetFrame(int frame_number) {
@@ -1369,7 +1384,7 @@ namespace Gst.Video {
 			return ret;
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_video_encoder_get_frames(IntPtr raw);
 
 		public GLib.List[] Frames { 
@@ -1380,14 +1395,25 @@ namespace Gst.Video {
 			}
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_video_encoder_get_latency(IntPtr raw, out ulong min_latency, out ulong max_latency);
 
 		public void GetLatency(out ulong min_latency, out ulong max_latency) {
 			gst_video_encoder_get_latency(Handle, out min_latency, out max_latency);
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		static extern long gst_video_encoder_get_max_encode_time(IntPtr raw, IntPtr frame);
+
+		public long GetMaxEncodeTime(Gst.Video.VideoCodecFrame frame) {
+			IntPtr native_frame = GLib.Marshaller.StructureToPtrAlloc (frame);
+			long raw_ret = gst_video_encoder_get_max_encode_time(Handle, native_frame);
+			long ret = raw_ret;
+			Marshal.FreeHGlobal (native_frame);
+			return ret;
+		}
+
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_video_encoder_get_oldest_frame(IntPtr raw);
 
 		public Gst.Video.VideoCodecFrame OldestFrame { 
@@ -1398,7 +1424,7 @@ namespace Gst.Video {
 			}
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_video_encoder_get_output_state(IntPtr raw);
 
 		public Gst.Video.VideoCodecState OutputState { 
@@ -1409,7 +1435,18 @@ namespace Gst.Video {
 			}
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		static extern bool gst_video_encoder_is_qos_enabled(IntPtr raw);
+
+		public bool IsQosEnabled { 
+			get {
+				bool raw_ret = gst_video_encoder_is_qos_enabled(Handle);
+				bool ret = raw_ret;
+				return ret;
+			}
+		}
+
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_video_encoder_merge_tags(IntPtr raw, IntPtr tags, int mode);
 
 		public void MergeTags(Gst.TagList tags, Gst.TagMergeMode mode) {
@@ -1420,7 +1457,7 @@ namespace Gst.Video {
 			MergeTags (null, mode);
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern bool gst_video_encoder_negotiate(IntPtr raw);
 
 		public bool Negotiate() {
@@ -1429,7 +1466,7 @@ namespace Gst.Video {
 			return ret;
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_video_encoder_proxy_getcaps(IntPtr raw, IntPtr caps, IntPtr filter);
 
 		public Gst.Caps ProxyGetcaps(Gst.Caps caps, Gst.Caps filter) {
@@ -1442,7 +1479,7 @@ namespace Gst.Video {
 			return ProxyGetcaps (null, null);
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_video_encoder_set_headers(IntPtr raw, IntPtr headers);
 
 		public GLib.List Headers { 
@@ -1451,14 +1488,14 @@ namespace Gst.Video {
 			}
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_video_encoder_set_latency(IntPtr raw, ulong min_latency, ulong max_latency);
 
 		public void SetLatency(ulong min_latency, ulong max_latency) {
 			gst_video_encoder_set_latency(Handle, min_latency, max_latency);
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_video_encoder_set_min_pts(IntPtr raw, ulong min_pts);
 
 		public ulong MinPts { 
@@ -1467,7 +1504,7 @@ namespace Gst.Video {
 			}
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_video_encoder_set_output_state(IntPtr raw, IntPtr caps, IntPtr reference);
 
 		public Gst.Video.VideoCodecState SetOutputState(Gst.Caps caps, Gst.Video.VideoCodecState reference) {
@@ -1483,7 +1520,16 @@ namespace Gst.Video {
 			return SetOutputState (caps, Gst.Video.VideoCodecState.Zero);
 		}
 
-		[DllImport("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		static extern void gst_video_encoder_set_qos_enabled(IntPtr raw, bool enabled);
+
+		public bool QosEnabled { 
+			set {
+				gst_video_encoder_set_qos_enabled(Handle, value);
+			}
+		}
+
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern bool gst_preset_delete_preset(IntPtr raw, IntPtr name);
 
 		public bool DeletePreset(string name) {
@@ -1494,7 +1540,7 @@ namespace Gst.Video {
 			return ret;
 		}
 
-		[DllImport("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern bool gst_preset_get_meta(IntPtr raw, IntPtr name, IntPtr tag, out IntPtr value);
 
 		public bool GetMeta(string name, string tag, out string value) {
@@ -1509,7 +1555,7 @@ namespace Gst.Video {
 			return ret;
 		}
 
-		[DllImport("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_preset_get_preset_names(IntPtr raw);
 
 		public string[] PresetNames { 
@@ -1520,7 +1566,7 @@ namespace Gst.Video {
 			}
 		}
 
-		[DllImport("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_preset_get_property_names(IntPtr raw);
 
 		public string[] PropertyNames { 
@@ -1531,7 +1577,7 @@ namespace Gst.Video {
 			}
 		}
 
-		[DllImport("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern bool gst_preset_is_editable(IntPtr raw);
 
 		public bool IsEditable { 
@@ -1542,7 +1588,7 @@ namespace Gst.Video {
 			}
 		}
 
-		[DllImport("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern bool gst_preset_load_preset(IntPtr raw, IntPtr name);
 
 		public bool LoadPreset(string name) {
@@ -1553,7 +1599,7 @@ namespace Gst.Video {
 			return ret;
 		}
 
-		[DllImport("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern bool gst_preset_rename_preset(IntPtr raw, IntPtr old_name, IntPtr new_name);
 
 		public bool RenamePreset(string old_name, string new_name) {
@@ -1566,7 +1612,7 @@ namespace Gst.Video {
 			return ret;
 		}
 
-		[DllImport("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern bool gst_preset_save_preset(IntPtr raw, IntPtr name);
 
 		public bool SavePreset(string name) {
@@ -1577,7 +1623,7 @@ namespace Gst.Video {
 			return ret;
 		}
 
-		[DllImport("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern bool gst_preset_set_meta(IntPtr raw, IntPtr name, IntPtr tag, IntPtr value);
 
 		public bool SetMeta(string name, string tag, string value) {
@@ -1599,7 +1645,7 @@ namespace Gst.Video {
 
 		static VideoEncoder ()
 		{
-			GtkSharp.GstSharp.ObjectManager.Initialize ();
+			GtkSharp.GstreamerSharp.ObjectManager.Initialize ();
 		}
 
 		// Internal representation of the wrapped structure ABI.

@@ -116,7 +116,14 @@ namespace Gst {
 			}
 		}
 
-		[DllImport("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		static extern void gst_mini_object_add_parent(IntPtr raw, IntPtr parent);
+
+		public void AddParent(Gst.MiniObject parent) {
+			gst_mini_object_add_parent(Handle, parent == null ? IntPtr.Zero : parent.Handle);
+		}
+
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_mini_object_get_qdata(IntPtr raw, uint quark);
 
 		public IntPtr GetQdata(uint quark) {
@@ -125,7 +132,7 @@ namespace Gst {
 			return ret;
 		}
 
-		[DllImport("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern bool gst_mini_object_is_writable(IntPtr raw);
 
 		public bool IsWritable { 
@@ -136,7 +143,7 @@ namespace Gst {
 			}
 		}
 
-		[DllImport("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern bool gst_mini_object_lock(IntPtr raw, int flags);
 
 		public bool Lock(Gst.LockFlags flags) {
@@ -145,14 +152,21 @@ namespace Gst {
 			return ret;
 		}
 
-		[DllImport("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		static extern void gst_mini_object_remove_parent(IntPtr raw, IntPtr parent);
+
+		public void RemoveParent(Gst.MiniObject parent) {
+			gst_mini_object_remove_parent(Handle, parent == null ? IntPtr.Zero : parent.Handle);
+		}
+
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_mini_object_set_qdata(IntPtr raw, uint quark, IntPtr data, GLib.DestroyNotify destroy);
 
 		public void SetQdata(uint quark, IntPtr data, GLib.DestroyNotify destroy) {
 			gst_mini_object_set_qdata(Handle, quark, data, destroy);
 		}
 
-		[DllImport("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_mini_object_steal_qdata(IntPtr raw, uint quark);
 
 		public IntPtr StealQdata(uint quark) {
@@ -161,7 +175,7 @@ namespace Gst {
 			return ret;
 		}
 
-		[DllImport("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_mini_object_unlock(IntPtr raw, int flags);
 
 		public void Unlock(Gst.LockFlags flags) {
@@ -170,7 +184,7 @@ namespace Gst {
 
 		public MiniObject(IntPtr raw) : base(raw) {}
 
-		[DllImport("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_mini_object_ref(IntPtr raw);
 
 		protected override void Ref (IntPtr raw)
@@ -181,7 +195,7 @@ namespace Gst {
 			}
 		}
 
-		[DllImport("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_mini_object_unref(IntPtr raw);
 
 		protected override void Unref (IntPtr raw)
@@ -274,22 +288,22 @@ namespace Gst {
 							, -1
 							, (uint) Marshal.SizeOf(typeof(IntPtr)) // free
 							, "dispose"
-							, "n_qdata"
+							, "priv_uint"
 							, (uint) Marshal.SizeOf(typeof(IntPtr))
 							, 0
 							),
-						new GLib.AbiField("n_qdata"
+						new GLib.AbiField("priv_uint"
 							, -1
-							, (uint) Marshal.SizeOf(typeof(uint)) // n_qdata
+							, (uint) Marshal.SizeOf(typeof(uint)) // priv_uint
 							, "free"
-							, "qdata"
-							, (long) Marshal.OffsetOf(typeof(GstMiniObject_n_qdataAlign), "n_qdata")
+							, "priv_pointer"
+							, (long) Marshal.OffsetOf(typeof(GstMiniObject_priv_uintAlign), "priv_uint")
 							, 0
 							),
-						new GLib.AbiField("qdata"
+						new GLib.AbiField("priv_pointer"
 							, -1
-							, (uint) Marshal.SizeOf(typeof(IntPtr)) // qdata
-							, "n_qdata"
+							, (uint) Marshal.SizeOf(typeof(IntPtr)) // priv_pointer
+							, "priv_uint"
 							, null
 							, (uint) Marshal.SizeOf(typeof(IntPtr))
 							, 0
@@ -329,10 +343,10 @@ namespace Gst {
 		}
 
 		[StructLayout(LayoutKind.Sequential)]
-		public struct GstMiniObject_n_qdataAlign
+		public struct GstMiniObject_priv_uintAlign
 		{
 			sbyte f1;
-			private uint n_qdata;
+			private uint priv_uint;
 		}
 
 

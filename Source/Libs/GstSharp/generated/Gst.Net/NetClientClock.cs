@@ -13,7 +13,7 @@ namespace Gst.Net {
 
 		public NetClientClock (IntPtr raw) : base(raw) {}
 
-		[DllImport("libgstnet-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstnet-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_net_client_clock_new(IntPtr name, IntPtr remote_address, int remote_port, ulong base_time);
 
 		public NetClientClock (string name, string remote_address, int remote_port, ulong base_time) : base (IntPtr.Zero)
@@ -115,6 +115,21 @@ namespace Gst.Net {
 			}
 		}
 
+		[GLib.Property ("qos-dscp")]
+		public int QosDscp {
+			get {
+				GLib.Value val = GetProperty ("qos-dscp");
+				int ret = (int) val;
+				val.Dispose ();
+				return ret;
+			}
+			set {
+				GLib.Value val = new GLib.Value(value);
+				SetProperty("qos-dscp", val);
+				val.Dispose ();
+			}
+		}
+
 		[GLib.Property ("round-trip-limit")]
 		public ulong RoundTripLimit {
 			get {
@@ -154,7 +169,7 @@ namespace Gst.Net {
 
 		// End of the ABI representation.
 
-		[DllImport("libgstnet-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstnet-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_net_client_clock_get_type();
 
 		public static new GLib.GType GType { 
@@ -168,7 +183,7 @@ namespace Gst.Net {
 
 		static NetClientClock ()
 		{
-			GtkSharp.GstSharp.ObjectManager.Initialize ();
+			GtkSharp.GstreamerSharp.ObjectManager.Initialize ();
 		}
 
 		// Internal representation of the wrapped structure ABI.

@@ -22,7 +22,7 @@ namespace Gst.Sdp {
 			}
 		}
 		public Gst.Sdp.MIKEYTSType Type;
-		private IntPtr _ts_value;
+		public byte TsValue;
 
 		public static Gst.Sdp.MIKEYPayloadT Zero = new Gst.Sdp.MIKEYPayloadT ();
 
@@ -34,7 +34,7 @@ namespace Gst.Sdp {
 
 		public bool Equals (MIKEYPayloadT other)
 		{
-			return true && Pt.Equals (other.Pt) && Type.Equals (other.Type) && _ts_value.Equals (other._ts_value);
+			return true && Pt.Equals (other.Pt) && Type.Equals (other.Type) && TsValue.Equals (other.TsValue);
 		}
 
 		public override bool Equals (object other)
@@ -44,7 +44,7 @@ namespace Gst.Sdp {
 
 		public override int GetHashCode ()
 		{
-			return this.GetType ().FullName.GetHashCode () ^ Pt.GetHashCode () ^ Type.GetHashCode () ^ _ts_value.GetHashCode ();
+			return this.GetType ().FullName.GetHashCode () ^ Pt.GetHashCode () ^ Type.GetHashCode () ^ TsValue.GetHashCode ();
 		}
 
 		private static GLib.GType GType {

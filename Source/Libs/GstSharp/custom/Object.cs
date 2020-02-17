@@ -48,14 +48,15 @@ namespace Gst {
 	{
 		private Dictionary <string, bool> PropertyNameCache = new Dictionary<string, bool> ();
 
-		[DllImport ("libgobject-2.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport ("gobject-2.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr g_object_class_find_property (IntPtr klass, IntPtr name);
 
 		bool PropertyExists (string name) {
 			if (PropertyNameCache.ContainsKey (name))
 				return PropertyNameCache [name];
 
-			var ptr = g_object_class_find_property (Marshal.ReadIntPtr (Handle), GLib.Marshaller.StringToPtrGStrdup (name));
+			IntPtr native_name = GLib.Marshaller.StringToPtrGStrdup (name);
+			var ptr = g_object_class_find_property (Marshal.ReadIntPtr (Handle), native_name);
 			var result = ptr != IntPtr.Zero;
 
 			// just cache the positive results because there might
@@ -63,6 +64,7 @@ namespace Gst {
 			if (result)
 				PropertyNameCache [name] = result;
 
+			GLib.Marshaller.Free (native_name);
 			return result;
 		}
 

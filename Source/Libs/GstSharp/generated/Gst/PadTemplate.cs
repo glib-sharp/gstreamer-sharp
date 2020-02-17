@@ -13,7 +13,7 @@ namespace Gst {
 
 		public PadTemplate (IntPtr raw) : base(raw) {}
 
-		[DllImport("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_pad_template_new(IntPtr name_template, int direction, int presence, IntPtr caps);
 
 		public PadTemplate (string name_template, Gst.PadDirection direction, Gst.PadPresence presence, Gst.Caps caps) : base (IntPtr.Zero)
@@ -39,7 +39,49 @@ namespace Gst {
 			GLib.Marshaller.Free (native_name_template);
 		}
 
-		[DllImport("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		static extern IntPtr gst_pad_template_new_from_static_pad_template_with_gtype(IntPtr pad_template, IntPtr pad_type);
+
+		public PadTemplate (Gst.StaticPadTemplate pad_template, GLib.GType pad_type) : base (IntPtr.Zero)
+		{
+			if (GetType () != typeof (PadTemplate)) {
+				var vals = new List<GLib.Value> ();
+				var names = new List<string> ();
+				CreateNativeObject (names.ToArray (), vals.ToArray ());
+				return;
+			}
+			IntPtr native_pad_template = GLib.Marshaller.StructureToPtrAlloc (pad_template);
+			Raw = gst_pad_template_new_from_static_pad_template_with_gtype(native_pad_template, pad_type.Val);
+			Marshal.FreeHGlobal (native_pad_template);
+		}
+
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		static extern IntPtr gst_pad_template_new_with_gtype(IntPtr name_template, int direction, int presence, IntPtr caps, IntPtr pad_type);
+
+		public PadTemplate (string name_template, Gst.PadDirection direction, Gst.PadPresence presence, Gst.Caps caps, GLib.GType pad_type) : base (IntPtr.Zero)
+		{
+			if (GetType () != typeof (PadTemplate)) {
+				var vals = new List<GLib.Value> ();
+				var names = new List<string> ();
+				names.Add ("name_template");
+				vals.Add (new GLib.Value (name_template));
+				names.Add ("direction");
+				vals.Add (new GLib.Value (direction));
+				names.Add ("presence");
+				vals.Add (new GLib.Value (presence));
+				if (caps != null) {
+					names.Add ("caps");
+					vals.Add (new GLib.Value (caps));
+				}
+				CreateNativeObject (names.ToArray (), vals.ToArray ());
+				return;
+			}
+			IntPtr native_name_template = GLib.Marshaller.StringToPtrGStrdup (name_template);
+			Raw = gst_pad_template_new_with_gtype(native_name_template, (int) direction, (int) presence, caps == null ? IntPtr.Zero : caps.Handle, pad_type.Val);
+			GLib.Marshaller.Free (native_name_template);
+		}
+
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_pad_template_get_caps(IntPtr raw);
 
 		[GLib.Property ("caps")]
@@ -56,6 +98,16 @@ namespace Gst {
 			get {
 				GLib.Value val = GetProperty ("direction");
 				Gst.PadDirection ret = (Gst.PadDirection) (Enum) val;
+				val.Dispose ();
+				return ret;
+			}
+		}
+
+		[GLib.Property ("gtype")]
+		public GLib.GType Gtype {
+			get {
+				GLib.Value val = GetProperty ("gtype");
+				GLib.GType ret = (GLib.GType) val;
 				val.Dispose ();
 				return ret;
 			}
@@ -212,7 +264,7 @@ namespace Gst {
 
 		// End of the ABI representation.
 
-		[DllImport("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_pad_template_get_type();
 
 		public static new GLib.GType GType { 
@@ -223,7 +275,7 @@ namespace Gst {
 			}
 		}
 
-		[DllImport("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_pad_template_pad_created(IntPtr raw, IntPtr pad);
 
 		public void PadCreated(Gst.Pad pad) {
@@ -265,16 +317,40 @@ namespace Gst {
 							, -1
 							, (uint) Marshal.SizeOf(typeof(IntPtr)) // caps
 							, "presence"
-							, "_gst_reserved"
+							, "ABI"
 							, (uint) Marshal.SizeOf(typeof(IntPtr))
 							, 0
 							),
-						new GLib.AbiField("_gst_reserved"
+						// union struct ABI
+							new GLib.AbiField("ABI._gst_reserved"
+								, -1
+								, (uint) Marshal.SizeOf(typeof(IntPtr)) * 4 // ABI._gst_reserved
+								, "caps"
+								, null
+								, (uint) Marshal.SizeOf(typeof(IntPtr))
+								, 0
+								),
+						// End ABI
+
+						// union struct ABI.abi
+							new GLib.AbiField("ABI.abi.gtype"
+								, -1
+								, (uint) Marshal.SizeOf(typeof(GLib.GType)) // ABI.abi.gtype
+								, "caps"
+								, null
+								, (long) Marshal.OffsetOf(typeof(GstPadTemplate_ABI_abi_gtypeAlign), "ABI_abi_gtype")
+								, 0
+								),
+						// End ABI.abi
+
+						new GLib.AbiField("ABI"
 							, -1
-							, (uint) Marshal.SizeOf(typeof(IntPtr)) * 4 // _gst_reserved
+							, new List<List<string>>() {  // union ABI
+						new List<string>() {"ABI._gst_reserved"},
+						new List<string>() {"ABI.abi.gtype"}
+					  }
 							, "caps"
 							, null
-							, (uint) Marshal.SizeOf(typeof(IntPtr))
 							, 0
 							),
 					});
@@ -295,6 +371,13 @@ namespace Gst {
 		{
 			sbyte f1;
 			private Gst.PadPresence presence;
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct GstPadTemplate_ABI_abi_gtypeAlign
+		{
+			sbyte f1;
+			private GLib.GType ABI_abi_gtype;
 		}
 
 

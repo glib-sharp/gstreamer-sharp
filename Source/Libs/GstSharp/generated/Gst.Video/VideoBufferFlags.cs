@@ -15,13 +15,15 @@ namespace Gst.Video {
 		Tff = 2097152,
 		Rff = 4194304,
 		Onefield = 8388608,
+		BottomField = 8388608,
+		TopField = 10485760,
 		MultipleView = 16777216,
 		FirstInBundle = 33554432,
 		Last = 268435456,
 	}
 
 	internal class VideoBufferFlagsGType {
-		[DllImport ("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport ("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_video_buffer_flags_get_type ();
 
 		public static GLib.GType GType {

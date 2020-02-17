@@ -23,7 +23,7 @@ namespace Gst.Sdp {
 			return (Gst.Sdp.SDPAttribute) Marshal.PtrToStructure (raw, typeof (Gst.Sdp.SDPAttribute));
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_attribute_clear(IntPtr raw);
 
 		public Gst.Sdp.SDPResult Clear() {
@@ -36,7 +36,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_attribute_set(IntPtr raw, IntPtr key, IntPtr value);
 
 		public Gst.Sdp.SDPResult Set(string key, string value) {
@@ -51,6 +51,10 @@ namespace Gst.Sdp {
 			GLib.Marshaller.Free (native_key);
 			GLib.Marshaller.Free (native_value);
 			return ret;
+		}
+
+		public Gst.Sdp.SDPResult Set(string key) {
+			return Set (key, null);
 		}
 
 		static void ReadNative (IntPtr native, ref Gst.Sdp.SDPAttribute target)

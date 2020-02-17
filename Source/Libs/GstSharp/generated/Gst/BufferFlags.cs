@@ -23,11 +23,12 @@ namespace Gst {
 		DeltaUnit = 8192,
 		TagMemory = 16384,
 		SyncAfter = 32768,
+		NonDroppable = 65536,
 		Last = 1048576,
 	}
 
 	internal class BufferFlagsGType {
-		[DllImport ("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport ("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_buffer_flags_get_type ();
 
 		public static GLib.GType GType {

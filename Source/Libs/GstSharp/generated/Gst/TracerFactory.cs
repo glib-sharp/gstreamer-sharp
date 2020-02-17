@@ -33,7 +33,7 @@ namespace Gst {
 
 		// End of the ABI representation.
 
-		[DllImport("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_tracer_factory_get_type();
 
 		public static new GLib.GType GType { 
@@ -44,13 +44,24 @@ namespace Gst {
 			}
 		}
 
-		[DllImport("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_tracer_factory_get_list();
 
 		public static Gst.TracerFactory[] List { 
 			get {
 				IntPtr raw_ret = gst_tracer_factory_get_list();
 				Gst.TracerFactory[] ret = (Gst.TracerFactory[]) GLib.Marshaller.ListPtrToArray (raw_ret, typeof(GLib.List), true, true, typeof(Gst.TracerFactory));
+				return ret;
+			}
+		}
+
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		static extern IntPtr gst_tracer_factory_get_tracer_type(IntPtr raw);
+
+		public GLib.GType TracerType { 
+			get {
+				IntPtr raw_ret = gst_tracer_factory_get_tracer_type(Handle);
+				GLib.GType ret = new GLib.GType(raw_ret);
 				return ret;
 			}
 		}

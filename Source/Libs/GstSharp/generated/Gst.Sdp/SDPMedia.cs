@@ -47,7 +47,7 @@ namespace Gst.Sdp {
 			return (Gst.Sdp.SDPMedia) Marshal.PtrToStructure (raw, typeof (Gst.Sdp.SDPMedia));
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_media_add_attribute(IntPtr raw, IntPtr key, IntPtr value);
 
 		public Gst.Sdp.SDPResult AddAttribute(string key, string value) {
@@ -64,7 +64,11 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		public Gst.Sdp.SDPResult AddAttribute(string key) {
+			return AddAttribute (key, null);
+		}
+
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_media_add_bandwidth(IntPtr raw, IntPtr bwtype, uint bandwidth);
 
 		public Gst.Sdp.SDPResult AddBandwidth(string bwtype, uint bandwidth) {
@@ -79,7 +83,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_media_add_connection(IntPtr raw, IntPtr nettype, IntPtr addrtype, IntPtr address, uint ttl, uint addr_number);
 
 		public Gst.Sdp.SDPResult AddConnection(string nettype, string addrtype, string address, uint ttl, uint addr_number) {
@@ -98,7 +102,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_media_add_format(IntPtr raw, IntPtr format);
 
 		public Gst.Sdp.SDPResult AddFormat(string format) {
@@ -113,7 +117,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_sdp_media_as_text(IntPtr raw);
 
 		public string AsText() {
@@ -126,7 +130,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern uint gst_sdp_media_attributes_len(IntPtr raw);
 
 		public uint AttributesLen() {
@@ -139,7 +143,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_media_attributes_to_caps(IntPtr raw, IntPtr caps);
 
 		public Gst.Sdp.SDPResult AttributesToCaps(Gst.Caps caps) {
@@ -152,7 +156,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern uint gst_sdp_media_bandwidths_len(IntPtr raw);
 
 		public uint BandwidthsLen() {
@@ -165,7 +169,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern uint gst_sdp_media_connections_len(IntPtr raw);
 
 		public uint ConnectionsLen() {
@@ -178,7 +182,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_media_copy(IntPtr raw, IntPtr copy);
 
 		public Gst.Sdp.SDPResult Copy(out Gst.Sdp.SDPMedia copy) {
@@ -194,7 +198,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern uint gst_sdp_media_formats_len(IntPtr raw);
 
 		public uint FormatsLen() {
@@ -207,7 +211,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_media_free(IntPtr raw);
 
 		public Gst.Sdp.SDPResult Free() {
@@ -220,7 +224,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_sdp_media_get_attribute(IntPtr raw, uint idx);
 
 		public Gst.Sdp.SDPAttribute GetAttribute(uint idx) {
@@ -233,7 +237,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_sdp_media_get_attribute_val(IntPtr raw, IntPtr key);
 
 		public string GetAttributeVal(string key) {
@@ -248,7 +252,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_sdp_media_get_attribute_val_n(IntPtr raw, IntPtr key, uint nth);
 
 		public string GetAttributeValN(string key, uint nth) {
@@ -263,7 +267,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_sdp_media_get_bandwidth(IntPtr raw, uint idx);
 
 		public Gst.Sdp.SDPBandwidth GetBandwidth(uint idx) {
@@ -276,7 +280,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_sdp_media_get_caps_from_media(IntPtr raw, int pt);
 
 		public Gst.Caps GetCapsFromMedia(int pt) {
@@ -289,7 +293,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_sdp_media_get_connection(IntPtr raw, uint idx);
 
 		public Gst.Sdp.SDPConnection GetConnection(uint idx) {
@@ -302,7 +306,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_sdp_media_get_format(IntPtr raw, uint idx);
 
 		public string GetFormat(uint idx) {
@@ -315,7 +319,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_media_init(IntPtr raw);
 
 		public Gst.Sdp.SDPResult Init() {
@@ -328,7 +332,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_media_insert_attribute(IntPtr raw, int idx, IntPtr attr);
 
 		public Gst.Sdp.SDPResult InsertAttribute(int idx, Gst.Sdp.SDPAttribute attr) {
@@ -343,7 +347,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_media_insert_bandwidth(IntPtr raw, int idx, IntPtr bw);
 
 		public Gst.Sdp.SDPResult InsertBandwidth(int idx, Gst.Sdp.SDPBandwidth bw) {
@@ -358,7 +362,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_media_insert_connection(IntPtr raw, int idx, IntPtr conn);
 
 		public Gst.Sdp.SDPResult InsertConnection(int idx, Gst.Sdp.SDPConnection conn) {
@@ -373,7 +377,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_media_insert_format(IntPtr raw, int idx, IntPtr format);
 
 		public Gst.Sdp.SDPResult InsertFormat(int idx, string format) {
@@ -388,7 +392,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_media_parse_keymgmt(IntPtr raw, out IntPtr mikey);
 
 		public Gst.Sdp.SDPResult ParseKeymgmt(out Gst.Sdp.MIKEYMessage mikey) {
@@ -403,7 +407,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_media_remove_attribute(IntPtr raw, uint idx);
 
 		public Gst.Sdp.SDPResult RemoveAttribute(uint idx) {
@@ -416,7 +420,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_media_remove_bandwidth(IntPtr raw, uint idx);
 
 		public Gst.Sdp.SDPResult RemoveBandwidth(uint idx) {
@@ -429,7 +433,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_media_remove_connection(IntPtr raw, uint idx);
 
 		public Gst.Sdp.SDPResult RemoveConnection(uint idx) {
@@ -442,7 +446,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_media_remove_format(IntPtr raw, uint idx);
 
 		public Gst.Sdp.SDPResult RemoveFormat(uint idx) {
@@ -455,7 +459,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_media_replace_attribute(IntPtr raw, uint idx, IntPtr attr);
 
 		public Gst.Sdp.SDPResult ReplaceAttribute(uint idx, Gst.Sdp.SDPAttribute attr) {
@@ -470,7 +474,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_media_replace_bandwidth(IntPtr raw, uint idx, IntPtr bw);
 
 		public Gst.Sdp.SDPResult ReplaceBandwidth(uint idx, Gst.Sdp.SDPBandwidth bw) {
@@ -485,7 +489,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_media_replace_connection(IntPtr raw, uint idx, IntPtr conn);
 
 		public Gst.Sdp.SDPResult ReplaceConnection(uint idx, Gst.Sdp.SDPConnection conn) {
@@ -500,7 +504,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_media_replace_format(IntPtr raw, uint idx, IntPtr format);
 
 		public Gst.Sdp.SDPResult ReplaceFormat(uint idx, string format) {
@@ -515,7 +519,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_media_set_information(IntPtr raw, IntPtr information);
 
 		public Gst.Sdp.SDPResult SetInformation(string information) {
@@ -530,7 +534,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_media_set_key(IntPtr raw, IntPtr type, IntPtr data);
 
 		public Gst.Sdp.SDPResult SetKey(string type, string data) {
@@ -547,7 +551,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_media_set_media(IntPtr raw, IntPtr med);
 
 		public Gst.Sdp.SDPResult SetMedia(string med) {
@@ -562,7 +566,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_media_set_port_info(IntPtr raw, uint port, uint num_ports);
 
 		public Gst.Sdp.SDPResult SetPortInfo(uint port, uint num_ports) {
@@ -575,7 +579,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_media_set_proto(IntPtr raw, IntPtr proto);
 
 		public Gst.Sdp.SDPResult SetProto(string proto) {
@@ -590,7 +594,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_media_uninit(IntPtr raw);
 
 		public Gst.Sdp.SDPResult Uninit() {
@@ -603,7 +607,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_media_new(IntPtr media);
 
 		public static Gst.Sdp.SDPResult New(out Gst.Sdp.SDPMedia media) {
@@ -615,7 +619,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_media_set_media_from_caps(IntPtr caps, IntPtr media);
 
 		public static Gst.Sdp.SDPResult SetMediaFromCaps(Gst.Caps caps, Gst.Sdp.SDPMedia media) {
@@ -633,7 +637,7 @@ namespace Gst.Sdp {
 
 		public bool Equals (SDPMedia other)
 		{
-			return true && Media.Equals (other.Media) && Port.Equals (other.Port) && NumPorts.Equals (other.NumPorts) && Proto.Equals (other.Proto) && Fmts.Equals (other.Fmts) && Information.Equals (other.Information) && Connections.Equals (other.Connections) && Bandwidths.Equals (other.Bandwidths) && Key.Equals (other.Key) && Attributes.Equals (other.Attributes);
+			return true && Media.Equals (other.Media) && Port.Equals (other.Port) && NumPorts.Equals (other.NumPorts) && Proto.Equals (other.Proto) && FmtsPtr.Equals (other.FmtsPtr) && Information.Equals (other.Information) && ConnectionsPtr.Equals (other.ConnectionsPtr) && BandwidthsPtr.Equals (other.BandwidthsPtr) && Key.Equals (other.Key) && AttributesPtr.Equals (other.AttributesPtr);
 		}
 
 		public override bool Equals (object other)
@@ -643,7 +647,7 @@ namespace Gst.Sdp {
 
 		public override int GetHashCode ()
 		{
-			return this.GetType ().FullName.GetHashCode () ^ Media.GetHashCode () ^ Port.GetHashCode () ^ NumPorts.GetHashCode () ^ Proto.GetHashCode () ^ Fmts.GetHashCode () ^ Information.GetHashCode () ^ Connections.GetHashCode () ^ Bandwidths.GetHashCode () ^ Key.GetHashCode () ^ Attributes.GetHashCode ();
+			return this.GetType ().FullName.GetHashCode () ^ Media.GetHashCode () ^ Port.GetHashCode () ^ NumPorts.GetHashCode () ^ Proto.GetHashCode () ^ FmtsPtr.GetHashCode () ^ Information.GetHashCode () ^ ConnectionsPtr.GetHashCode () ^ BandwidthsPtr.GetHashCode () ^ Key.GetHashCode () ^ AttributesPtr.GetHashCode ();
 		}
 
 		private static GLib.GType GType {

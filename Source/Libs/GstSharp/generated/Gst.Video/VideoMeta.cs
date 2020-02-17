@@ -43,14 +43,14 @@ namespace Gst.Video {
 			return (Gst.Video.VideoMeta) Marshal.PtrToStructure (raw, typeof (Gst.Video.VideoMeta));
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
-		static extern bool gst_video_meta_map(IntPtr raw, uint plane, IntPtr info, IntPtr data, int stride, int flags);
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		static extern bool gst_video_meta_map(IntPtr raw, uint plane, IntPtr info, out IntPtr data, out int stride, int flags);
 
-		public bool Map(uint plane, Gst.MapInfo info, IntPtr data, int stride, Gst.MapFlags flags) {
+		public bool Map(uint plane, Gst.MapInfo info, out IntPtr data, out int stride, Gst.MapFlags flags) {
 			IntPtr this_as_native = System.Runtime.InteropServices.Marshal.AllocHGlobal (System.Runtime.InteropServices.Marshal.SizeOf (this));
 			System.Runtime.InteropServices.Marshal.StructureToPtr (this, this_as_native, false);
 			IntPtr native_info = GLib.Marshaller.StructureToPtrAlloc (info);
-			bool raw_ret = gst_video_meta_map(this_as_native, plane, native_info, data, stride, (int) flags);
+			bool raw_ret = gst_video_meta_map(this_as_native, plane, native_info, out data, out stride, (int) flags);
 			bool ret = raw_ret;
 			ReadNative (this_as_native, ref this);
 			System.Runtime.InteropServices.Marshal.FreeHGlobal (this_as_native);
@@ -58,7 +58,7 @@ namespace Gst.Video {
 			return ret;
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern bool gst_video_meta_unmap(IntPtr raw, uint plane, IntPtr info);
 
 		public bool Unmap(uint plane, Gst.MapInfo info) {
@@ -73,7 +73,7 @@ namespace Gst.Video {
 			return ret;
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_video_meta_get_info();
 
 		public static Gst.MetaInfo Info { 

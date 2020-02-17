@@ -22,7 +22,7 @@ namespace Gst.Sdp {
 			}
 		}
 		public byte Len;
-		private IntPtr _rand;
+		public byte Rand;
 
 		public static Gst.Sdp.MIKEYPayloadRAND Zero = new Gst.Sdp.MIKEYPayloadRAND ();
 
@@ -34,7 +34,7 @@ namespace Gst.Sdp {
 
 		public bool Equals (MIKEYPayloadRAND other)
 		{
-			return true && Pt.Equals (other.Pt) && Len.Equals (other.Len) && _rand.Equals (other._rand);
+			return true && Pt.Equals (other.Pt) && Len.Equals (other.Len) && Rand.Equals (other.Rand);
 		}
 
 		public override bool Equals (object other)
@@ -44,7 +44,7 @@ namespace Gst.Sdp {
 
 		public override int GetHashCode ()
 		{
-			return this.GetType ().FullName.GetHashCode () ^ Pt.GetHashCode () ^ Len.GetHashCode () ^ _rand.GetHashCode ();
+			return this.GetType ().FullName.GetHashCode () ^ Pt.GetHashCode () ^ Len.GetHashCode () ^ Rand.GetHashCode ();
 		}
 
 		private static GLib.GType GType {

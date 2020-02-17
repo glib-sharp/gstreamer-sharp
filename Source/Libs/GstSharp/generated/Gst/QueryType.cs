@@ -29,10 +29,11 @@ namespace Gst {
 		Caps = 43523,
 		Drain = 46086,
 		Context = 48643,
+		Bitrate = 51202,
 	}
 
 	internal class QueryTypeGType {
-		[DllImport ("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport ("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_query_type_get_type ();
 
 		public static GLib.GType GType {

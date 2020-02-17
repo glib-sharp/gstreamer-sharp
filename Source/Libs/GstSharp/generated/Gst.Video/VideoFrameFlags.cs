@@ -16,12 +16,14 @@ namespace Gst.Video {
 		Tff = 2,
 		Rff = 4,
 		Onefield = 8,
+		BottomField = 8,
+		TopField = 10,
 		MultipleView = 16,
 		FirstInBundle = 32,
 	}
 
 	internal class VideoFrameFlagsGType {
-		[DllImport ("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport ("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_video_frame_flags_get_type ();
 
 		public static GLib.GType GType {

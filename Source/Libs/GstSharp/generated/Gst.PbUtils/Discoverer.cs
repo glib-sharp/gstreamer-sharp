@@ -13,7 +13,7 @@ namespace Gst.PbUtils {
 
 		public Discoverer (IntPtr raw) : base(raw) {}
 
-		[DllImport("libgstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_discoverer_new(ulong timeout);
 
 		public Discoverer (ulong timeout) : base (IntPtr.Zero)
@@ -44,6 +44,21 @@ namespace Gst.PbUtils {
 			}
 		}
 
+		[GLib.Property ("use-cache")]
+		public bool UseCache {
+			get {
+				GLib.Value val = GetProperty ("use-cache");
+				bool ret = (bool) val;
+				val.Dispose ();
+				return ret;
+			}
+			set {
+				GLib.Value val = new GLib.Value(value);
+				SetProperty("use-cache", val);
+				val.Dispose ();
+			}
+		}
+
 		[GLib.Signal("discovered")]
 		public event Gst.PbUtils.DiscoveredHandler Discovered {
 			add {
@@ -51,16 +66,6 @@ namespace Gst.PbUtils {
 			}
 			remove {
 				this.RemoveSignalHandler ("discovered", value);
-			}
-		}
-
-		[GLib.Signal("source-setup")]
-		public event Gst.PbUtils.SourceSetupHandler SourceSetup {
-			add {
-				this.AddSignalHandler ("source-setup", value, typeof (Gst.PbUtils.SourceSetupArgs));
-			}
-			remove {
-				this.RemoveSignalHandler ("source-setup", value);
 			}
 		}
 
@@ -81,6 +86,16 @@ namespace Gst.PbUtils {
 			}
 			remove {
 				this.RemoveSignalHandler ("finished", value);
+			}
+		}
+
+		[GLib.Signal("source-setup")]
+		public event Gst.PbUtils.SourceSetupHandler SourceSetup {
+			add {
+				this.AddSignalHandler ("source-setup", value, typeof (Gst.PbUtils.SourceSetupArgs));
+			}
+			remove {
+				this.RemoveSignalHandler ("source-setup", value);
 			}
 		}
 
@@ -352,7 +367,7 @@ namespace Gst.PbUtils {
 
 		// End of the ABI representation.
 
-		[DllImport("libgstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_discoverer_get_type();
 
 		public static new GLib.GType GType { 
@@ -363,7 +378,7 @@ namespace Gst.PbUtils {
 			}
 		}
 
-		[DllImport("libgstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern unsafe IntPtr gst_discoverer_discover_uri(IntPtr raw, IntPtr uri, out IntPtr error);
 
 		public unsafe Gst.PbUtils.DiscovererInfo DiscoverUri(string uri) {
@@ -376,7 +391,7 @@ namespace Gst.PbUtils {
 			return ret;
 		}
 
-		[DllImport("libgstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern bool gst_discoverer_discover_uri_async(IntPtr raw, IntPtr uri);
 
 		public bool DiscoverUriAsync(string uri) {
@@ -387,14 +402,14 @@ namespace Gst.PbUtils {
 			return ret;
 		}
 
-		[DllImport("libgstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_discoverer_start(IntPtr raw);
 
 		public void Start() {
 			gst_discoverer_start(Handle);
 		}
 
-		[DllImport("libgstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstpbutils-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_discoverer_stop(IntPtr raw);
 
 		public void Stop() {
@@ -404,7 +419,7 @@ namespace Gst.PbUtils {
 
 		static Discoverer ()
 		{
-			GtkSharp.GstSharp.ObjectManager.Initialize ();
+			GtkSharp.GstreamerSharp.ObjectManager.Initialize ();
 		}
 
 		// Internal representation of the wrapped structure ABI.

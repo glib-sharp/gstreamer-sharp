@@ -28,7 +28,7 @@ namespace Gst.Sdp {
 			return (Gst.Sdp.SDPTime) Marshal.PtrToStructure (raw, typeof (Gst.Sdp.SDPTime));
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_time_clear(IntPtr raw);
 
 		public Gst.Sdp.SDPResult Clear() {
@@ -41,7 +41,7 @@ namespace Gst.Sdp {
 			return ret;
 		}
 
-		[DllImport("libgstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstsdp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_sdp_time_set(IntPtr raw, IntPtr start, IntPtr stop, IntPtr[] repeat);
 
 		public Gst.Sdp.SDPResult Set(string start, string stop, string[] repeat) {
@@ -52,7 +52,7 @@ namespace Gst.Sdp {
 			int cnt_repeat = repeat == null ? 0 : repeat.Length;
 			IntPtr[] native_repeat = new IntPtr [cnt_repeat + 1];
 			for (int i = 0; i < cnt_repeat; i++)
-				native_repeat [i] = GLib.Marshaller.StringToPtrGStrdup (repeat[i]);
+				native_repeat [i] = GLib.Marshaller.StringToPtrGStrdup(repeat[i]);
 			native_repeat [cnt_repeat] = IntPtr.Zero;
 			int raw_ret = gst_sdp_time_set(this_as_native, native_start, native_stop, native_repeat);
 			Gst.Sdp.SDPResult ret = (Gst.Sdp.SDPResult) raw_ret;
@@ -60,10 +60,6 @@ namespace Gst.Sdp {
 			System.Runtime.InteropServices.Marshal.FreeHGlobal (this_as_native);
 			GLib.Marshaller.Free (native_start);
 			GLib.Marshaller.Free (native_stop);
-			for (int i = 0; i < native_repeat.Length - 1; i++) {
-				repeat [i] = GLib.Marshaller.Utf8PtrToString (native_repeat[i]);
-				GLib.Marshaller.Free (native_repeat[i]);
-			}
 			return ret;
 		}
 
@@ -74,7 +70,7 @@ namespace Gst.Sdp {
 
 		public bool Equals (SDPTime other)
 		{
-			return true && Start.Equals (other.Start) && Stop.Equals (other.Stop) && Repeat.Equals (other.Repeat);
+			return true && Start.Equals (other.Start) && Stop.Equals (other.Stop) && RepeatPtr.Equals (other.RepeatPtr);
 		}
 
 		public override bool Equals (object other)
@@ -84,7 +80,7 @@ namespace Gst.Sdp {
 
 		public override int GetHashCode ()
 		{
-			return this.GetType ().FullName.GetHashCode () ^ Start.GetHashCode () ^ Stop.GetHashCode () ^ Repeat.GetHashCode ();
+			return this.GetType ().FullName.GetHashCode () ^ Start.GetHashCode () ^ Stop.GetHashCode () ^ RepeatPtr.GetHashCode ();
 		}
 
 		private static GLib.GType GType {

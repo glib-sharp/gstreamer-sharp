@@ -28,6 +28,7 @@ namespace Gst {
 		public const string ELEMENT_FACTORY_KLASS_ENCODER = @"Encoder";
 		public const string ELEMENT_FACTORY_KLASS_ENCRYPTOR = @"Encryptor";
 		public const string ELEMENT_FACTORY_KLASS_FORMATTER = @"Formatter";
+		public const string ELEMENT_FACTORY_KLASS_HARDWARE = @"Hardware";
 		public const string ELEMENT_FACTORY_KLASS_MEDIA_AUDIO = @"Audio";
 		public const string ELEMENT_FACTORY_KLASS_MEDIA_IMAGE = @"Image";
 		public const string ELEMENT_FACTORY_KLASS_MEDIA_METADATA = @"Metadata";
@@ -51,22 +52,25 @@ namespace Gst {
 		public const long FORMAT_PERCENT_MAX = 1000000;
 		public const long FORMAT_PERCENT_SCALE = 10000;
 		public const string FOURCC_FORMAT = @"c%c%c%c";
+		public const int GROUP_ID_INVALID = 0;
 		public const string LICENSE_UNKNOWN = @"unknown";
 		public const int LOCK_FLAG_READWRITE = 3;
 		public const int MAP_READWRITE = 3;
 		public const string META_TAG_MEMORY_STR = @"memory";
 		public const long MSECOND = 1000000;
-		public const int PARAM_CONTROLLABLE = 2;
-		public const int PARAM_MUTABLE_PAUSED = 8;
-		public const int PARAM_MUTABLE_PLAYING = 16;
-		public const int PARAM_MUTABLE_READY = 4;
-		public const int PARAM_USER_SHIFT = 256;
+		public const int PARAM_CONTROLLABLE = 512;
+		public const int PARAM_MUTABLE_PAUSED = 2048;
+		public const int PARAM_MUTABLE_PLAYING = 4096;
+		public const int PARAM_MUTABLE_READY = 1024;
+		public const int PARAM_USER_SHIFT = 65536;
 		public const string PROTECTION_SYSTEM_ID_CAPS_FIELD = @"protection-system";
+		public const string PROTECTION_UNSPECIFIED_SYSTEM_ID = @"unspecified-system-id";
 		public const string PTR_FORMAT = @"paA";
 		public const int QUERY_NUM_SHIFT = 8;
 		public const int QUERY_TYPE_BOTH = 3;
 		public const long SECOND = 1000000000;
 		public const string SEGMENT_FORMAT = @"paB";
+		public const int SEQNUM_INVALID = 0;
 		public const string STIME_FORMAT = @"c%";
 		public const string TAG_ALBUM = @"album";
 		public const string TAG_ALBUM_ARTIST = @"album-artist";
@@ -162,7 +166,7 @@ namespace Gst {
 		public const int VALUE_UNORDERED = 2;
 		public const int VERSION_MAJOR = 1;
 		public const int VERSION_MICRO = 0;
-		public const int VERSION_MINOR = 13;
+		public const int VERSION_MINOR = 17;
 		public const int VERSION_NANO = 1;
 #endregion
 	}

@@ -12,11 +12,12 @@ namespace Gst.Rtp {
 	public enum RTPBufferFlags {
 
 		Retransmission = 1048576,
+		Redundant = 2097152,
 		Last = 268435456,
 	}
 
 	internal class RTPBufferFlagsGType {
-		[DllImport ("libgstrtp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport ("gstrtp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_rtp_buffer_flags_get_type ();
 
 		public static GLib.GType GType {

@@ -17,7 +17,7 @@ namespace Gst.Rtp {
 		public const int RTCP_MAX_SDES_ITEM_COUNT = 31;
 		public const int RTCP_REDUCED_SIZE_VALID_MASK = 57592;
 		public const int RTCP_VALID_MASK = 57598;
-		public const int RTCP_VALID_VALUE = 0;
+		public const int RTCP_VALID_VALUE = 200;
 		public const int RTCP_VERSION = 2;
 		public const string RTP_HDREXT_BASE = @"urn:ietf:params:rtp-hdrext:";
 		public const string RTP_HDREXT_NTP_56 = @"ntp-56";
@@ -59,6 +59,7 @@ namespace Gst.Rtp {
 		public const string RTP_PAYLOAD_TS41_STRING = @"19";
 		public const int RTP_PAYLOAD_TS48 = 18;
 		public const string RTP_PAYLOAD_TS48_STRING = @"18";
+		public const int RTP_SOURCE_META_MAX_CSRC_COUNT = 15;
 		public const int RTP_VERSION = 2;
 #endregion
 	}

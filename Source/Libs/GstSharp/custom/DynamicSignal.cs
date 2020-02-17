@@ -32,6 +32,7 @@ using System.Collections;
 namespace Gst
 {
 
+	[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 	delegate void GClosureMarshal (IntPtr closure, ref GLib.Value retval, uint argc, IntPtr argsPtr,
                                  IntPtr invocation_hint, IntPtr data);
 
@@ -68,12 +69,13 @@ namespace Gst
 			}
 		}
 
-		class SignalInfo
+		class SignalInfo : IDisposable
 		{
 			uint handlerId;
 			IntPtr closure;
 			Delegate registeredHandler;
 			Type argsType;
+			GCHandle gch;
 
 			public IntPtr Closure {
 				get {
@@ -111,11 +113,12 @@ namespace Gst
 				}
 			}
 
-			public SignalInfo (uint handlerId, IntPtr closure, Delegate registeredHandler)
+			public SignalInfo (uint handlerId, IntPtr closure, Delegate registeredHandler, GCHandle gch)
 			{
 				this.handlerId = handlerId;
 				this.closure = closure;
 				this.registeredHandler = registeredHandler;
+				this.gch = gch;
 
 				if (!IsValidDelegate (registeredHandler))
 					throw new Exception ("Invalid delegate");
@@ -161,6 +164,13 @@ namespace Gst
 					return false;
 
 				return true;
+			}
+
+			public void Dispose ()
+			{
+				registeredHandler = null;
+				gch.Free ();
+				GC.SuppressFinalize (this);
 			}
 
 			public static bool IsValidDelegate (Delegate d)
@@ -226,9 +236,10 @@ namespace Gst
 
 				// Let's allocate 64bytes for the GClosure, it should be more than necessary.
 				IntPtr closure = g_closure_new_simple (64, IntPtr.Zero);
-				g_closure_set_meta_marshal (closure, (IntPtr)GCHandle.Alloc (k), marshalHandler);
+				GCHandle gch = GCHandle.Alloc (k);
+				g_closure_set_meta_marshal (closure, (IntPtr)gch, marshalHandler);
 				uint signalId = g_signal_connect_closure (o.Handle, name, closure, after);
-				SignalHandlers.Add (k, new SignalInfo (signalId, closure, handler));
+				SignalHandlers.Add (k, new SignalInfo (signalId, closure, handler, gch));
 			}
 		}
 
@@ -241,6 +252,7 @@ namespace Gst
 				if (newHandler == null || handler == null) {
 					g_signal_handler_disconnect (o.Handle, si.HandlerId);
 					SignalHandlers.Remove (k);
+					si.Dispose ();
 				} else {
 					si.RegisteredHandler = newHandler;
 				}
@@ -277,14 +289,14 @@ namespace Gst
 		}
 
 
-		[DllImport ("libgobject-2.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport ("gobject-2.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr g_closure_new_simple (int size, IntPtr data);
 
-		[DllImport ("libgobject-2.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport ("gobject-2.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern uint g_signal_connect_closure (IntPtr instance,
 		                                               string name, IntPtr closure, bool after);
 
-		[DllImport ("libgobject-2.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport ("gobject-2.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void g_closure_set_meta_marshal (IntPtr closure, IntPtr data, GClosureMarshal marshal);
 
 		class GTypeSignalKey
@@ -371,7 +383,7 @@ namespace Gst
 				query.param_types = new Type[q.n_params];
 
 				for (int i = 0; i < query.n_params; i++) {
-					IntPtr t = Marshal.ReadIntPtr (q.param_types, i);
+					IntPtr t = Marshal.ReadIntPtr (q.param_types, i * IntPtr.Size);
 					GType g = new GType (t);
 
 					query.param_types [i] = (Type)g;
@@ -420,16 +432,16 @@ namespace Gst
 			return ret;
 		}
 
-		[DllImport ("libgobject-2.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport ("gobject-2.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int g_signal_handler_disconnect (IntPtr o, uint handler_id);
 
-		[DllImport ("libgobject-2.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport ("gobject-2.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern uint g_signal_lookup (IntPtr name, IntPtr itype);
 
-		[DllImport ("libglib-2.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport ("glib-2.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern uint g_quark_from_string (IntPtr str);
 
-		[DllImport ("libgobject-2.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport ("gobject-2.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void g_signal_emitv (GLib.Value[] parameters, uint signal_id, uint detail, ref GLib.Value return_value);
 
 		[StructLayout (LayoutKind.Sequential)]
@@ -444,7 +456,7 @@ namespace Gst
 			public IntPtr param_types;
 		}
 
-		[DllImport ("libgobject-2.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport ("gobject-2.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void g_signal_query (uint signal_id, ref GSignalQuery query);
 	}
 }

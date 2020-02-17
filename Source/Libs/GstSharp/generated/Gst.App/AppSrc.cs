@@ -33,10 +33,10 @@ namespace Gst.App {
 			}
 		}
 
-		[DllImport("libgstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_app_src_get_caps(IntPtr raw);
 
-		[DllImport("libgstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_app_src_set_caps(IntPtr raw, IntPtr caps);
 
 		[GLib.Property ("caps")]
@@ -51,7 +51,7 @@ namespace Gst.App {
 			}
 		}
 
-		[DllImport("libgstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern ulong gst_app_src_get_current_level_bytes(IntPtr raw);
 
 		[GLib.Property ("current-level-bytes")]
@@ -63,10 +63,10 @@ namespace Gst.App {
 			}
 		}
 
-		[DllImport("libgstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern ulong gst_app_src_get_duration(IntPtr raw);
 
-		[DllImport("libgstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_app_src_set_duration(IntPtr raw, ulong duration);
 
 		[GLib.Property ("duration")]
@@ -81,10 +81,10 @@ namespace Gst.App {
 			}
 		}
 
-		[DllImport("libgstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern bool gst_app_src_get_emit_signals(IntPtr raw);
 
-		[DllImport("libgstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_app_src_set_emit_signals(IntPtr raw, bool emit);
 
 		[GLib.Property ("emit-signals")]
@@ -129,10 +129,10 @@ namespace Gst.App {
 			}
 		}
 
-		[DllImport("libgstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern ulong gst_app_src_get_max_bytes(IntPtr raw);
 
-		[DllImport("libgstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_app_src_set_max_bytes(IntPtr raw, ulong max);
 
 		[GLib.Property ("max-bytes")]
@@ -192,10 +192,10 @@ namespace Gst.App {
 			}
 		}
 
-		[DllImport("libgstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern long gst_app_src_get_size(IntPtr raw);
 
-		[DllImport("libgstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_app_src_set_size(IntPtr raw, long size);
 
 		[GLib.Property ("size")]
@@ -210,10 +210,10 @@ namespace Gst.App {
 			}
 		}
 
-		[DllImport("libgstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_app_src_get_stream_type(IntPtr raw);
 
-		[DllImport("libgstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_app_src_set_stream_type(IntPtr raw, int type);
 
 		[GLib.Property ("stream-type")]
@@ -225,16 +225,6 @@ namespace Gst.App {
 			}
 			set  {
 				gst_app_src_set_stream_type(Handle, (int) value);
-			}
-		}
-
-		[GLib.Signal("need-data")]
-		public event Gst.App.NeedDataHandler NeedData {
-			add {
-				this.AddSignalHandler ("need-data", value, typeof (Gst.App.NeedDataArgs));
-			}
-			remove {
-				this.RemoveSignalHandler ("need-data", value);
 			}
 		}
 
@@ -258,16 +248,6 @@ namespace Gst.App {
 			}
 		}
 
-		[GLib.Signal("push-buffer")]
-		public event Gst.App.PushBufferEventHandler PushBufferEvent {
-			add {
-				this.AddSignalHandler ("push-buffer", value, typeof (Gst.App.PushBufferEventArgs));
-			}
-			remove {
-				this.RemoveSignalHandler ("push-buffer", value);
-			}
-		}
-
 		[GLib.Signal("enough-data")]
 		public event System.EventHandler EnoughData {
 			add {
@@ -278,6 +258,16 @@ namespace Gst.App {
 			}
 		}
 
+		[GLib.Signal("need-data")]
+		public event Gst.App.NeedDataHandler NeedData {
+			add {
+				this.AddSignalHandler ("need-data", value, typeof (Gst.App.NeedDataArgs));
+			}
+			remove {
+				this.RemoveSignalHandler ("need-data", value);
+			}
+		}
+
 		[GLib.Signal("end-of-stream")]
 		public event Gst.App.EndOfStreamEventHandler EndOfStreamEvent {
 			add {
@@ -285,6 +275,26 @@ namespace Gst.App {
 			}
 			remove {
 				this.RemoveSignalHandler ("end-of-stream", value);
+			}
+		}
+
+		[GLib.Signal("push-buffer")]
+		public event Gst.App.PushBufferEventHandler PushBufferEvent {
+			add {
+				this.AddSignalHandler ("push-buffer", value, typeof (Gst.App.PushBufferEventArgs));
+			}
+			remove {
+				this.RemoveSignalHandler ("push-buffer", value);
+			}
+		}
+
+		[GLib.Signal("push-buffer-list")]
+		public event Gst.App.PushBufferListEventHandler PushBufferListEvent {
+			add {
+				this.AddSignalHandler ("push-buffer-list", value, typeof (Gst.App.PushBufferListEventArgs));
+			}
+			remove {
+				this.RemoveSignalHandler ("push-buffer-list", value);
 			}
 		}
 
@@ -626,6 +636,64 @@ namespace Gst.App {
 			return (Gst.FlowReturn) __result;
 		}
 
+		static PushBufferListEventNativeDelegate PushBufferListEvent_cb_delegate;
+		static PushBufferListEventNativeDelegate PushBufferListEventVMCallback {
+			get {
+				if (PushBufferListEvent_cb_delegate == null)
+					PushBufferListEvent_cb_delegate = new PushBufferListEventNativeDelegate (PushBufferListEvent_cb);
+				return PushBufferListEvent_cb_delegate;
+			}
+		}
+
+		static void OverridePushBufferListEvent (GLib.GType gtype)
+		{
+			OverridePushBufferListEvent (gtype, PushBufferListEventVMCallback);
+		}
+
+		static void OverridePushBufferListEvent (GLib.GType gtype, PushBufferListEventNativeDelegate callback)
+		{
+			unsafe {
+				IntPtr* raw_ptr = (IntPtr*)(((long) gtype.GetClassPtr()) + (long) class_abi.GetFieldOffset("push_buffer_list"));
+				*raw_ptr = Marshal.GetFunctionPointerForDelegate((Delegate) callback);
+			}
+		}
+
+		[UnmanagedFunctionPointer (CallingConvention.Cdecl)]
+		delegate int PushBufferListEventNativeDelegate (IntPtr inst, IntPtr buffer_list);
+
+		static int PushBufferListEvent_cb (IntPtr inst, IntPtr buffer_list)
+		{
+			try {
+				AppSrc __obj = GLib.Object.GetObject (inst, false) as AppSrc;
+				Gst.FlowReturn __result;
+				__result = __obj.OnPushBufferListEvent (buffer_list == IntPtr.Zero ? null : (Gst.BufferList) GLib.Opaque.GetOpaque (buffer_list, typeof (Gst.BufferList), false));
+				return (int) __result;
+			} catch (Exception e) {
+				GLib.ExceptionManager.RaiseUnhandledException (e, true);
+				// NOTREACHED: above call does not return.
+				throw e;
+			}
+		}
+
+		[GLib.DefaultSignalHandler(Type=typeof(Gst.App.AppSrc), ConnectionMethod="OverridePushBufferListEvent")]
+		protected virtual Gst.FlowReturn OnPushBufferListEvent (Gst.BufferList buffer_list)
+		{
+			return InternalPushBufferListEvent (buffer_list);
+		}
+
+		private Gst.FlowReturn InternalPushBufferListEvent (Gst.BufferList buffer_list)
+		{
+			PushBufferListEventNativeDelegate unmanaged = null;
+			unsafe {
+				IntPtr* raw_ptr = (IntPtr*)(((long) this.LookupGType().GetThresholdType().GetClassPtr()) + (long) class_abi.GetFieldOffset("push_buffer_list"));
+				unmanaged = (PushBufferListEventNativeDelegate) Marshal.GetDelegateForFunctionPointer(*raw_ptr, typeof(PushBufferListEventNativeDelegate));
+			}
+			if (unmanaged == null) return (Gst.FlowReturn) 0;
+
+			int __result = unmanaged (this.Handle, buffer_list == null ? IntPtr.Zero : buffer_list.Handle);
+			return (Gst.FlowReturn) __result;
+		}
+
 
 		// Internal representation of the wrapped structure ABI.
 		static GLib.AbiStruct _class_abi = null;
@@ -677,14 +745,22 @@ namespace Gst.App {
 							, -1
 							, (uint) Marshal.SizeOf(typeof(IntPtr)) // push_sample
 							, "end_of_stream"
+							, "push_buffer_list"
+							, (uint) Marshal.SizeOf(typeof(IntPtr))
+							, 0
+							),
+						new GLib.AbiField("push_buffer_list"
+							, -1
+							, (uint) Marshal.SizeOf(typeof(IntPtr)) // push_buffer_list
+							, "push_sample"
 							, "_gst_reserved"
 							, (uint) Marshal.SizeOf(typeof(IntPtr))
 							, 0
 							),
 						new GLib.AbiField("_gst_reserved"
 							, -1
-							, (uint) Marshal.SizeOf(typeof(IntPtr)) * 3 // _gst_reserved
-							, "push_sample"
+							, (uint) Marshal.SizeOf(typeof(IntPtr)) * 2 // _gst_reserved
+							, "push_buffer_list"
 							, null
 							, (uint) Marshal.SizeOf(typeof(IntPtr))
 							, 0
@@ -698,7 +774,7 @@ namespace Gst.App {
 
 		// End of the ABI representation.
 
-		[DllImport("libgstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_app_src_get_type();
 
 		public static new GLib.GType GType { 
@@ -709,7 +785,7 @@ namespace Gst.App {
 			}
 		}
 
-		[DllImport("libgstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_app_src_end_of_stream(IntPtr raw);
 
 		public Gst.FlowReturn EndOfStream() {
@@ -718,14 +794,14 @@ namespace Gst.App {
 			return ret;
 		}
 
-		[DllImport("libgstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_app_src_get_latency(IntPtr raw, out ulong min, out ulong max);
 
 		public void GetLatency(out ulong min, out ulong max) {
 			gst_app_src_get_latency(Handle, out min, out max);
 		}
 
-		[DllImport("libgstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_app_src_push_buffer(IntPtr raw, IntPtr buffer);
 
 		public Gst.FlowReturn PushBuffer(Gst.Buffer buffer) {
@@ -735,7 +811,17 @@ namespace Gst.App {
 			return ret;
 		}
 
-		[DllImport("libgstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		static extern int gst_app_src_push_buffer_list(IntPtr raw, IntPtr buffer_list);
+
+		public Gst.FlowReturn PushBufferList(Gst.BufferList buffer_list) {
+			buffer_list.Owned = false;
+			int raw_ret = gst_app_src_push_buffer_list(Handle, buffer_list == null ? IntPtr.Zero : buffer_list.Handle);
+			Gst.FlowReturn ret = (Gst.FlowReturn) raw_ret;
+			return ret;
+		}
+
+		[DllImport("gstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_app_src_push_sample(IntPtr raw, IntPtr sample);
 
 		public Gst.FlowReturn PushSample(Gst.Sample sample) {
@@ -744,14 +830,14 @@ namespace Gst.App {
 			return ret;
 		}
 
-		[DllImport("libgstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstapp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_app_src_set_latency(IntPtr raw, ulong min, ulong max);
 
 		public void SetLatency(ulong min, ulong max) {
 			gst_app_src_set_latency(Handle, min, max);
 		}
 
-		[DllImport("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_uri_handler_get_uri(IntPtr raw);
 
 		public string Uri { 
@@ -762,7 +848,7 @@ namespace Gst.App {
 			}
 		}
 
-		[DllImport("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_uri_handler_get_uri_type(IntPtr raw);
 
 		public Gst.URIType UriType { 
@@ -773,7 +859,7 @@ namespace Gst.App {
 			}
 		}
 
-		[DllImport("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern bool gst_uri_handler_set_uri(IntPtr raw, IntPtr uri, out IntPtr error);
 
 		public bool SetUri(string uri) {
@@ -789,7 +875,7 @@ namespace Gst.App {
 
 		static AppSrc ()
 		{
-			GtkSharp.GstSharp.ObjectManager.Initialize ();
+			GtkSharp.GstreamerSharp.ObjectManager.Initialize ();
 		}
 
 		// Internal representation of the wrapped structure ABI.

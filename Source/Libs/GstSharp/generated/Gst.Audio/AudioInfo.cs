@@ -101,7 +101,7 @@ namespace Gst.Audio {
 			}
 		}
 
-		[DllImport("libgstaudio-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstaudio-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_audio_info_get_type();
 
 		public static GLib.GType GType { 
@@ -112,16 +112,16 @@ namespace Gst.Audio {
 			}
 		}
 
-		[DllImport("libgstaudio-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
-		static extern bool gst_audio_info_convert(IntPtr raw, int src_fmt, long src_val, int dest_fmt, long dest_val);
+		[DllImport("gstaudio-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		static extern bool gst_audio_info_convert(IntPtr raw, int src_fmt, long src_val, int dest_fmt, out long dest_val);
 
-		public bool Convert(Gst.Format src_fmt, long src_val, Gst.Format dest_fmt, long dest_val) {
-			bool raw_ret = gst_audio_info_convert(Handle, (int) src_fmt, src_val, (int) dest_fmt, dest_val);
+		public bool Convert(Gst.Format src_fmt, long src_val, Gst.Format dest_fmt, out long dest_val) {
+			bool raw_ret = gst_audio_info_convert(Handle, (int) src_fmt, src_val, (int) dest_fmt, out dest_val);
 			bool ret = raw_ret;
 			return ret;
 		}
 
-		[DllImport("libgstaudio-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstaudio-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_audio_info_copy(IntPtr raw);
 
 		public Gst.Audio.AudioInfo Copy() {
@@ -130,7 +130,7 @@ namespace Gst.Audio {
 			return ret;
 		}
 
-		[DllImport("libgstaudio-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstaudio-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern bool gst_audio_info_from_caps(IntPtr raw, IntPtr caps);
 
 		public bool FromCaps(Gst.Caps caps) {
@@ -139,14 +139,14 @@ namespace Gst.Audio {
 			return ret;
 		}
 
-		[DllImport("libgstaudio-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstaudio-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_audio_info_init(IntPtr raw);
 
 		public void Init() {
 			gst_audio_info_init(Handle);
 		}
 
-		[DllImport("libgstaudio-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstaudio-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern bool gst_audio_info_is_equal(IntPtr raw, IntPtr other);
 
 		public bool IsEqual(Gst.Audio.AudioInfo other) {
@@ -155,14 +155,22 @@ namespace Gst.Audio {
 			return ret;
 		}
 
-		[DllImport("libgstaudio-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
-		static extern void gst_audio_info_set_format(IntPtr raw, int format, int rate, int channels, int position);
+		[DllImport("gstaudio-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		static extern void gst_audio_info_set_format(IntPtr raw, int format, int rate, int channels, int[] position);
 
-		public void SetFormat(Gst.Audio.AudioFormat format, int rate, int channels, Gst.Audio.AudioChannelPosition position) {
-			gst_audio_info_set_format(Handle, (int) format, rate, channels, (int) position);
+		public void SetFormat(Gst.Audio.AudioFormat format, int rate, int channels, Gst.Audio.AudioChannelPosition[] position) {
+			int cnt_position = position == null ? 0 : position.Length;
+			int[] native_position = new int [cnt_position];
+			for (int i = 0; i < cnt_position; i++)
+				native_position [i] = (int) position[i];
+			gst_audio_info_set_format(Handle, (int) format, rate, channels, native_position);
 		}
 
-		[DllImport("libgstaudio-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		public void SetFormat(Gst.Audio.AudioFormat format, int rate, int channels) {
+			SetFormat (format, rate, channels, null);
+		}
+
+		[DllImport("gstaudio-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_audio_info_to_caps(IntPtr raw);
 
 		public Gst.Caps ToCaps() {
@@ -173,7 +181,7 @@ namespace Gst.Audio {
 
 		public AudioInfo(IntPtr raw) : base(raw) {}
 
-		[DllImport("libgstaudio-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstaudio-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_audio_info_new();
 
 		public AudioInfo () 
@@ -181,7 +189,7 @@ namespace Gst.Audio {
 			Raw = gst_audio_info_new();
 		}
 
-		[DllImport("libgstaudio-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstaudio-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_audio_info_free(IntPtr raw);
 
 		protected override void Free (IntPtr raw)

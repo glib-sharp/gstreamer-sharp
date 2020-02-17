@@ -50,11 +50,12 @@ namespace Gst {
 		StreamCollection = 2147483652,
 		StreamsSelected = 2147483653,
 		Redirect = 2147483654,
+		DeviceChanged = 2147483654,
 		Any = 4294967295,
 	}
 
 	internal class MessageTypeGType {
-		[DllImport ("libgstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport ("gstreamer-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_message_type_get_type ();
 
 		public static GLib.GType GType {

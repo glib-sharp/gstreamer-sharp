@@ -49,7 +49,7 @@ namespace Gst.Rtsp {
 			try {
 				IRTSPExtensionImplementor __obj = GLib.Object.GetObject (inst, false) as IRTSPExtensionImplementor;
 				bool __result;
-				__result = __obj.DetectServer (resp == IntPtr.Zero ? null : (Gst.Rtsp.RTSPMessage) GLib.Opaque.GetOpaque (resp, typeof (Gst.Rtsp.RTSPMessage), false));
+				__result = __obj.DetectServer (Gst.Rtsp.RTSPMessage.New (resp));
 				return __result;
 			} catch (Exception e) {
 				GLib.ExceptionManager.RaiseUnhandledException (e, true);
@@ -66,7 +66,7 @@ namespace Gst.Rtsp {
 			try {
 				IRTSPExtensionImplementor __obj = GLib.Object.GetObject (inst, false) as IRTSPExtensionImplementor;
 				Gst.Rtsp.RTSPResult __result;
-				__result = __obj.BeforeSend (req == IntPtr.Zero ? null : (Gst.Rtsp.RTSPMessage) GLib.Opaque.GetOpaque (req, typeof (Gst.Rtsp.RTSPMessage), false));
+				__result = __obj.BeforeSend (Gst.Rtsp.RTSPMessage.New (req));
 				return (int) __result;
 			} catch (Exception e) {
 				GLib.ExceptionManager.RaiseUnhandledException (e, true);
@@ -83,7 +83,7 @@ namespace Gst.Rtsp {
 			try {
 				IRTSPExtensionImplementor __obj = GLib.Object.GetObject (inst, false) as IRTSPExtensionImplementor;
 				Gst.Rtsp.RTSPResult __result;
-				__result = __obj.AfterSend (req == IntPtr.Zero ? null : (Gst.Rtsp.RTSPMessage) GLib.Opaque.GetOpaque (req, typeof (Gst.Rtsp.RTSPMessage), false), resp == IntPtr.Zero ? null : (Gst.Rtsp.RTSPMessage) GLib.Opaque.GetOpaque (resp, typeof (Gst.Rtsp.RTSPMessage), false));
+				__result = __obj.AfterSend (Gst.Rtsp.RTSPMessage.New (req), Gst.Rtsp.RTSPMessage.New (resp));
 				return (int) __result;
 			} catch (Exception e) {
 				GLib.ExceptionManager.RaiseUnhandledException (e, true);
@@ -100,7 +100,7 @@ namespace Gst.Rtsp {
 			try {
 				IRTSPExtensionImplementor __obj = GLib.Object.GetObject (inst, false) as IRTSPExtensionImplementor;
 				Gst.Rtsp.RTSPResult __result;
-				__result = __obj.ParseSdp (Gst.Sdp.SDPMessage.New (sdp), s == IntPtr.Zero ? null : (Gst.Structure) GLib.Opaque.GetOpaque (s, typeof (Gst.Structure), false));
+				__result = __obj.ParseSdp (sdp == IntPtr.Zero ? null : (Gst.Sdp.SDPMessage) GLib.Opaque.GetOpaque (sdp, typeof (Gst.Sdp.SDPMessage), false), s == IntPtr.Zero ? null : (Gst.Structure) GLib.Opaque.GetOpaque (s, typeof (Gst.Structure), false));
 				return (int) __result;
 			} catch (Exception e) {
 				GLib.ExceptionManager.RaiseUnhandledException (e, true);
@@ -185,7 +185,7 @@ namespace Gst.Rtsp {
 			try {
 				IRTSPExtensionImplementor __obj = GLib.Object.GetObject (inst, false) as IRTSPExtensionImplementor;
 				Gst.Rtsp.RTSPResult __result;
-				__result = __obj.ReceiveRequest (req == IntPtr.Zero ? null : (Gst.Rtsp.RTSPMessage) GLib.Opaque.GetOpaque (req, typeof (Gst.Rtsp.RTSPMessage), false));
+				__result = __obj.ReceiveRequest (Gst.Rtsp.RTSPMessage.New (req));
 				return (int) __result;
 			} catch (Exception e) {
 				GLib.ExceptionManager.RaiseUnhandledException (e, true);
@@ -235,7 +235,7 @@ namespace Gst.Rtsp {
 			implementor = GLib.Object.GetObject (handle);
 		}
 
-		[DllImport("libgstrtsp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstrtsp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_rtsp_extension_get_type();
 
 		private static GLib.GType _gtype = new GLib.GType (gst_rtsp_extension_get_type ());
@@ -298,25 +298,31 @@ namespace Gst.Rtsp {
 			}
 		}
 
-		[DllImport("libgstrtsp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstrtsp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_rtsp_extension_after_send(IntPtr raw, IntPtr req, IntPtr resp);
 
 		public Gst.Rtsp.RTSPResult AfterSend(Gst.Rtsp.RTSPMessage req, Gst.Rtsp.RTSPMessage resp) {
-			int raw_ret = gst_rtsp_extension_after_send(Handle, req == null ? IntPtr.Zero : req.Handle, resp == null ? IntPtr.Zero : resp.Handle);
+			IntPtr native_req = GLib.Marshaller.StructureToPtrAlloc (req);
+			IntPtr native_resp = GLib.Marshaller.StructureToPtrAlloc (resp);
+			int raw_ret = gst_rtsp_extension_after_send(Handle, native_req, native_resp);
 			Gst.Rtsp.RTSPResult ret = (Gst.Rtsp.RTSPResult) raw_ret;
+			Marshal.FreeHGlobal (native_req);
+			Marshal.FreeHGlobal (native_resp);
 			return ret;
 		}
 
-		[DllImport("libgstrtsp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstrtsp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_rtsp_extension_before_send(IntPtr raw, IntPtr req);
 
 		public Gst.Rtsp.RTSPResult BeforeSend(Gst.Rtsp.RTSPMessage req) {
-			int raw_ret = gst_rtsp_extension_before_send(Handle, req == null ? IntPtr.Zero : req.Handle);
+			IntPtr native_req = GLib.Marshaller.StructureToPtrAlloc (req);
+			int raw_ret = gst_rtsp_extension_before_send(Handle, native_req);
 			Gst.Rtsp.RTSPResult ret = (Gst.Rtsp.RTSPResult) raw_ret;
+			Marshal.FreeHGlobal (native_req);
 			return ret;
 		}
 
-		[DllImport("libgstrtsp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstrtsp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern bool gst_rtsp_extension_configure_stream(IntPtr raw, IntPtr caps);
 
 		public bool ConfigureStream(Gst.Caps caps) {
@@ -325,16 +331,18 @@ namespace Gst.Rtsp {
 			return ret;
 		}
 
-		[DllImport("libgstrtsp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstrtsp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern bool gst_rtsp_extension_detect_server(IntPtr raw, IntPtr resp);
 
 		public bool DetectServer(Gst.Rtsp.RTSPMessage resp) {
-			bool raw_ret = gst_rtsp_extension_detect_server(Handle, resp == null ? IntPtr.Zero : resp.Handle);
+			IntPtr native_resp = GLib.Marshaller.StructureToPtrAlloc (resp);
+			bool raw_ret = gst_rtsp_extension_detect_server(Handle, native_resp);
 			bool ret = raw_ret;
+			Marshal.FreeHGlobal (native_resp);
 			return ret;
 		}
 
-		[DllImport("libgstrtsp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstrtsp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_rtsp_extension_get_transports(IntPtr raw, int protocols, IntPtr transport);
 
 		public Gst.Rtsp.RTSPResult GetTransports(Gst.Rtsp.RTSPLowerTrans protocols, string transport) {
@@ -345,36 +353,40 @@ namespace Gst.Rtsp {
 			return ret;
 		}
 
-		[DllImport("libgstrtsp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstrtsp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_rtsp_extension_parse_sdp(IntPtr raw, IntPtr sdp, IntPtr s);
 
 		public Gst.Rtsp.RTSPResult ParseSdp(Gst.Sdp.SDPMessage sdp, Gst.Structure s) {
-			IntPtr native_sdp = GLib.Marshaller.StructureToPtrAlloc (sdp);
-			int raw_ret = gst_rtsp_extension_parse_sdp(Handle, native_sdp, s == null ? IntPtr.Zero : s.Handle);
+			int raw_ret = gst_rtsp_extension_parse_sdp(Handle, sdp == null ? IntPtr.Zero : sdp.Handle, s == null ? IntPtr.Zero : s.Handle);
 			Gst.Rtsp.RTSPResult ret = (Gst.Rtsp.RTSPResult) raw_ret;
-			Marshal.FreeHGlobal (native_sdp);
 			return ret;
 		}
 
-		[DllImport("libgstrtsp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstrtsp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_rtsp_extension_receive_request(IntPtr raw, IntPtr req);
 
 		public Gst.Rtsp.RTSPResult ReceiveRequest(Gst.Rtsp.RTSPMessage req) {
-			int raw_ret = gst_rtsp_extension_receive_request(Handle, req == null ? IntPtr.Zero : req.Handle);
+			IntPtr native_req = GLib.Marshaller.StructureToPtrAlloc (req);
+			int raw_ret = gst_rtsp_extension_receive_request(Handle, native_req);
 			Gst.Rtsp.RTSPResult ret = (Gst.Rtsp.RTSPResult) raw_ret;
+			Marshal.FreeHGlobal (native_req);
 			return ret;
 		}
 
-		[DllImport("libgstrtsp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstrtsp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_rtsp_extension_send(IntPtr raw, IntPtr req, IntPtr resp);
 
 		public Gst.Rtsp.RTSPResult Send(Gst.Rtsp.RTSPMessage req, Gst.Rtsp.RTSPMessage resp) {
-			int raw_ret = gst_rtsp_extension_send(Handle, req == null ? IntPtr.Zero : req.Handle, resp == null ? IntPtr.Zero : resp.Handle);
+			IntPtr native_req = GLib.Marshaller.StructureToPtrAlloc (req);
+			IntPtr native_resp = GLib.Marshaller.StructureToPtrAlloc (resp);
+			int raw_ret = gst_rtsp_extension_send(Handle, native_req, native_resp);
 			Gst.Rtsp.RTSPResult ret = (Gst.Rtsp.RTSPResult) raw_ret;
+			Marshal.FreeHGlobal (native_req);
+			Marshal.FreeHGlobal (native_resp);
 			return ret;
 		}
 
-		[DllImport("libgstrtsp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstrtsp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_rtsp_extension_setup_media(IntPtr raw, IntPtr media);
 
 		public Gst.Rtsp.RTSPResult SetupMedia(Gst.Sdp.SDPMedia media) {
@@ -385,7 +397,7 @@ namespace Gst.Rtsp {
 			return ret;
 		}
 
-		[DllImport("libgstrtsp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstrtsp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_rtsp_extension_stream_select(IntPtr raw, IntPtr url);
 
 		public Gst.Rtsp.RTSPResult StreamSelect(Gst.Rtsp.RTSPUrl url) {

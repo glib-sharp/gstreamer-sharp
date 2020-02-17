@@ -39,7 +39,7 @@ namespace Gst.Sdp {
 
 		public bool Equals (MIKEYPayloadKEMAC other)
 		{
-			return true && Pt.Equals (other.Pt) && EncAlg.Equals (other.EncAlg) && MacAlg.Equals (other.MacAlg) && Subpayloads.Equals (other.Subpayloads);
+			return true && Pt.Equals (other.Pt) && EncAlg.Equals (other.EncAlg) && MacAlg.Equals (other.MacAlg) && SubpayloadsPtr.Equals (other.SubpayloadsPtr);
 		}
 
 		public override bool Equals (object other)
@@ -49,7 +49,7 @@ namespace Gst.Sdp {
 
 		public override int GetHashCode ()
 		{
-			return this.GetType ().FullName.GetHashCode () ^ Pt.GetHashCode () ^ EncAlg.GetHashCode () ^ MacAlg.GetHashCode () ^ Subpayloads.GetHashCode ();
+			return this.GetType ().FullName.GetHashCode () ^ Pt.GetHashCode () ^ EncAlg.GetHashCode () ^ MacAlg.GetHashCode () ^ SubpayloadsPtr.GetHashCode ();
 		}
 
 		private static GLib.GType GType {

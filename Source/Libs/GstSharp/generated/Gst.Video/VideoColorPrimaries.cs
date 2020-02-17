@@ -19,10 +19,14 @@ namespace Gst.Video {
 		Film = 6,
 		Bt2020 = 7,
 		Adobergb = 8,
+		Smptest428 = 9,
+		Smpterp431 = 10,
+		Smpteeg432 = 11,
+		Ebu3213 = 12,
 	}
 
 	internal class VideoColorPrimariesGType {
-		[DllImport ("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport ("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_video_color_primaries_get_type ();
 
 		public static GLib.GType GType {

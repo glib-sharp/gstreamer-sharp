@@ -63,6 +63,21 @@ namespace Gst.Rtp {
 			}
 		}
 
+		[GLib.Property ("onvif-no-rate-control")]
+		public bool OnvifNoRateControl {
+			get {
+				GLib.Value val = GetProperty ("onvif-no-rate-control");
+				bool ret = (bool) val;
+				val.Dispose ();
+				return ret;
+			}
+			set {
+				GLib.Value val = new GLib.Value(value);
+				SetProperty("onvif-no-rate-control", val);
+				val.Dispose ();
+			}
+		}
+
 		[GLib.Property ("perfect-rtptime")]
 		public bool PerfectRtptime {
 			get {
@@ -129,6 +144,21 @@ namespace Gst.Rtp {
 			set {
 				GLib.Value val = new GLib.Value(value);
 				SetProperty("seqnum-offset", val);
+				val.Dispose ();
+			}
+		}
+
+		[GLib.Property ("source-info")]
+		public bool SourceInfo {
+			get {
+				GLib.Value val = GetProperty ("source-info");
+				bool ret = (bool) val;
+				val.Dispose ();
+				return ret;
+			}
+			set {
+				GLib.Value val = new GLib.Value(value);
+				SetProperty("source-info", val);
 				val.Dispose ();
 			}
 		}
@@ -603,7 +633,7 @@ namespace Gst.Rtp {
 
 		// End of the ABI representation.
 
-		[DllImport("libgstrtp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstrtp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_rtp_base_payload_get_type();
 
 		public static new GLib.GType GType { 
@@ -614,7 +644,25 @@ namespace Gst.Rtp {
 			}
 		}
 
-		[DllImport("libgstrtp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstrtp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		static extern IntPtr gst_rtp_base_payload_allocate_output_buffer(IntPtr raw, uint payload_len, byte pad_len, byte csrc_count);
+
+		public Gst.Buffer AllocateOutputBuffer(uint payload_len, byte pad_len, byte csrc_count) {
+			IntPtr raw_ret = gst_rtp_base_payload_allocate_output_buffer(Handle, payload_len, pad_len, csrc_count);
+			Gst.Buffer ret = raw_ret == IntPtr.Zero ? null : (Gst.Buffer) GLib.Opaque.GetOpaque (raw_ret, typeof (Gst.Buffer), true);
+			return ret;
+		}
+
+		[DllImport("gstrtp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		static extern uint gst_rtp_base_payload_get_source_count(IntPtr raw, IntPtr buffer);
+
+		public uint GetSourceCount(Gst.Buffer buffer) {
+			uint raw_ret = gst_rtp_base_payload_get_source_count(Handle, buffer == null ? IntPtr.Zero : buffer.Handle);
+			uint ret = raw_ret;
+			return ret;
+		}
+
+		[DllImport("gstrtp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern bool gst_rtp_base_payload_is_filled(IntPtr raw, uint size, ulong duration);
 
 		public bool IsFilled(uint size, ulong duration) {
@@ -623,7 +671,18 @@ namespace Gst.Rtp {
 			return ret;
 		}
 
-		[DllImport("libgstrtp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstrtp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		static extern bool gst_rtp_base_payload_is_source_info_enabled(IntPtr raw);
+
+		public bool IsSourceInfoEnabled { 
+			get {
+				bool raw_ret = gst_rtp_base_payload_is_source_info_enabled(Handle);
+				bool ret = raw_ret;
+				return ret;
+			}
+		}
+
+		[DllImport("gstrtp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_rtp_base_payload_push(IntPtr raw, IntPtr buffer);
 
 		public Gst.FlowReturn Push(Gst.Buffer buffer) {
@@ -632,7 +691,7 @@ namespace Gst.Rtp {
 			return ret;
 		}
 
-		[DllImport("libgstrtp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstrtp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_rtp_base_payload_push_list(IntPtr raw, IntPtr list);
 
 		public Gst.FlowReturn PushList(Gst.BufferList list) {
@@ -641,7 +700,7 @@ namespace Gst.Rtp {
 			return ret;
 		}
 
-		[DllImport("libgstrtp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstrtp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_rtp_base_payload_set_options(IntPtr raw, IntPtr media, bool dynamic, IntPtr encoding_name, uint clock_rate);
 
 		public void SetOptions(string media, bool dynamic, string encoding_name, uint clock_rate) {
@@ -652,10 +711,19 @@ namespace Gst.Rtp {
 			GLib.Marshaller.Free (native_encoding_name);
 		}
 
+		[DllImport("gstrtp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		static extern void gst_rtp_base_payload_set_source_info_enabled(IntPtr raw, bool enable);
+
+		public bool SourceInfoEnabled { 
+			set {
+				gst_rtp_base_payload_set_source_info_enabled(Handle, value);
+			}
+		}
+
 
 		static RTPBasePayload ()
 		{
-			GtkSharp.GstSharp.ObjectManager.Initialize ();
+			GtkSharp.GstreamerSharp.ObjectManager.Initialize ();
 		}
 
 		// Internal representation of the wrapped structure ABI.

@@ -27,7 +27,7 @@ namespace Gst.Video {
 			return (Gst.Video.VideoTimeCode) Marshal.PtrToStructure (raw, typeof (Gst.Video.VideoTimeCode));
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_video_time_code_new(uint fps_n, uint fps_d, IntPtr latest_daily_jam, int flags, uint hours, uint minutes, uint seconds, uint frames, uint field_count);
 
 		public static VideoTimeCode New(uint fps_n, uint fps_d, GLib.DateTime latest_daily_jam, Gst.Video.VideoTimeCodeFlags flags, uint hours, uint minutes, uint seconds, uint frames, uint field_count)
@@ -36,7 +36,7 @@ namespace Gst.Video {
 			return result;
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_video_time_code_new_empty();
 
 		public static VideoTimeCode NewEmpty()
@@ -45,7 +45,7 @@ namespace Gst.Video {
 			return result;
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_video_time_code_new_from_date_time(uint fps_n, uint fps_d, IntPtr dt, int flags, uint field_count);
 
 		public static VideoTimeCode NewFromDateTime(uint fps_n, uint fps_d, GLib.DateTime dt, Gst.Video.VideoTimeCodeFlags flags, uint field_count)
@@ -54,7 +54,16 @@ namespace Gst.Video {
 			return result;
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		static extern IntPtr gst_video_time_code_new_from_date_time_full(uint fps_n, uint fps_d, IntPtr dt, int flags, uint field_count);
+
+		public static VideoTimeCode NewFromDateTimeFull(uint fps_n, uint fps_d, GLib.DateTime dt, Gst.Video.VideoTimeCodeFlags flags, uint field_count)
+		{
+			VideoTimeCode result = VideoTimeCode.New (gst_video_time_code_new_from_date_time_full(fps_n, fps_d, dt == null ? IntPtr.Zero : dt.Handle, (int) flags, field_count));
+			return result;
+		}
+
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_video_time_code_new_from_string(IntPtr tc_str);
 
 		public static VideoTimeCode NewFromString(string tc_str)
@@ -65,7 +74,7 @@ namespace Gst.Video {
 			return result;
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_video_time_code_get_type();
 
 		public static GLib.GType GType { 
@@ -76,7 +85,7 @@ namespace Gst.Video {
 			}
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_video_time_code_add_frames(IntPtr raw, long frames);
 
 		public void AddFrames(long frames) {
@@ -87,7 +96,7 @@ namespace Gst.Video {
 			System.Runtime.InteropServices.Marshal.FreeHGlobal (this_as_native);
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_video_time_code_add_interval(IntPtr raw, IntPtr tc_inter);
 
 		public Gst.Video.VideoTimeCode AddInterval(Gst.Video.VideoTimeCodeInterval tc_inter) {
@@ -102,7 +111,7 @@ namespace Gst.Video {
 			return ret;
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_video_time_code_clear(IntPtr raw);
 
 		public void Clear() {
@@ -113,7 +122,7 @@ namespace Gst.Video {
 			System.Runtime.InteropServices.Marshal.FreeHGlobal (this_as_native);
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern int gst_video_time_code_compare(IntPtr raw, IntPtr tc2);
 
 		public int Compare(Gst.Video.VideoTimeCode tc2) {
@@ -128,7 +137,7 @@ namespace Gst.Video {
 			return ret;
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern ulong gst_video_time_code_frames_since_daily_jam(IntPtr raw);
 
 		public ulong FramesSinceDailyJam() {
@@ -141,7 +150,7 @@ namespace Gst.Video {
 			return ret;
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_video_time_code_increment_frame(IntPtr raw);
 
 		public void IncrementFrame() {
@@ -152,7 +161,7 @@ namespace Gst.Video {
 			System.Runtime.InteropServices.Marshal.FreeHGlobal (this_as_native);
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_video_time_code_init(IntPtr raw, uint fps_n, uint fps_d, IntPtr latest_daily_jam, int flags, uint hours, uint minutes, uint seconds, uint frames, uint field_count);
 
 		public void Init(uint fps_n, uint fps_d, GLib.DateTime latest_daily_jam, Gst.Video.VideoTimeCodeFlags flags, uint hours, uint minutes, uint seconds, uint frames, uint field_count) {
@@ -163,7 +172,7 @@ namespace Gst.Video {
 			System.Runtime.InteropServices.Marshal.FreeHGlobal (this_as_native);
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_video_time_code_init_from_date_time(IntPtr raw, uint fps_n, uint fps_d, IntPtr dt, int flags, uint field_count);
 
 		public void InitFromDateTime(uint fps_n, uint fps_d, GLib.DateTime dt, Gst.Video.VideoTimeCodeFlags flags, uint field_count) {
@@ -174,7 +183,20 @@ namespace Gst.Video {
 			System.Runtime.InteropServices.Marshal.FreeHGlobal (this_as_native);
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		static extern bool gst_video_time_code_init_from_date_time_full(IntPtr raw, uint fps_n, uint fps_d, IntPtr dt, int flags, uint field_count);
+
+		public bool InitFromDateTimeFull(uint fps_n, uint fps_d, GLib.DateTime dt, Gst.Video.VideoTimeCodeFlags flags, uint field_count) {
+			IntPtr this_as_native = System.Runtime.InteropServices.Marshal.AllocHGlobal (System.Runtime.InteropServices.Marshal.SizeOf (this));
+			System.Runtime.InteropServices.Marshal.StructureToPtr (this, this_as_native, false);
+			bool raw_ret = gst_video_time_code_init_from_date_time_full(this_as_native, fps_n, fps_d, dt == null ? IntPtr.Zero : dt.Handle, (int) flags, field_count);
+			bool ret = raw_ret;
+			ReadNative (this_as_native, ref this);
+			System.Runtime.InteropServices.Marshal.FreeHGlobal (this_as_native);
+			return ret;
+		}
+
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern bool gst_video_time_code_is_valid(IntPtr raw);
 
 		public bool IsValid { 
@@ -189,7 +211,7 @@ namespace Gst.Video {
 			}
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern ulong gst_video_time_code_nsec_since_daily_jam(IntPtr raw);
 
 		public ulong NsecSinceDailyJam() {
@@ -202,7 +224,7 @@ namespace Gst.Video {
 			return ret;
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_video_time_code_to_date_time(IntPtr raw);
 
 		public GLib.DateTime ToDateTime() {
@@ -215,7 +237,7 @@ namespace Gst.Video {
 			return ret;
 		}
 
-		[DllImport("libgstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstvideo-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_video_time_code_to_string(IntPtr raw);
 
 		public override string ToString() {

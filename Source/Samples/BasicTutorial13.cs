@@ -26,9 +26,9 @@ namespace Samples
 			Event seekEvent;
 			// Create the seek event
 			if (Rate > 0) {
-				seekEvent = new Event (Rate, Format.Time, SeekFlags.Flush | SeekFlags.Accurate, SeekType.Set, position, SeekType.None, 0);
+				seekEvent = Event.NewSeek (Rate, Format.Time, SeekFlags.Flush | SeekFlags.Accurate, SeekType.Set, position, SeekType.None, 0);
 			} else {
-				seekEvent = new Event (Rate, Format.Time, SeekFlags.Flush | SeekFlags.Accurate, SeekType.Set, 0, SeekType.Set, position);
+				seekEvent = Event.NewSeek (Rate, Format.Time, SeekFlags.Flush | SeekFlags.Accurate, SeekType.Set, 0, SeekType.Set, position);
 			}
 
 			if (VideoSink == null) {
@@ -70,7 +70,7 @@ namespace Samples
 						// If we have not done so, obtain the sink through which we will send the step events
 						VideoSink = (Element)Pipeline ["video-sink"];
 					}
-					var evnt = new Event (Format.Buffers, 1, Rate, true, false);
+					var evnt = Event.NewStep (Format.Buffers, 1, Rate, true, false);
 					VideoSink.SendEvent (evnt);
 
 					Console.WriteLine ("Stepping one frame");

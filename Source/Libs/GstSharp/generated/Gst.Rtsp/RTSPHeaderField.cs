@@ -93,11 +93,17 @@ namespace Gst.Rtsp {
 		XSessioncookie = 80,
 		RtcpInterval = 81,
 		Keymgmt = 82,
-		Last = 83,
+		PipelinedRequests = 83,
+		MediaProperties = 84,
+		SeekStyle = 85,
+		AcceptRanges = 86,
+		Frames = 87,
+		RateControl = 88,
+		Last = 89,
 	}
 
 	internal class RTSPHeaderFieldGType {
-		[DllImport ("libgstrtsp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport ("gstrtsp-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_rtsp_header_field_get_type ();
 
 		public static GLib.GType GType {

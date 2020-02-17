@@ -13,7 +13,7 @@ namespace Gst.Base {
 
 		public CollectPads (IntPtr raw) : base(raw) {}
 
-		[DllImport("libgstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_collect_pads_new();
 
 		public CollectPads () : base (IntPtr.Zero)
@@ -58,7 +58,7 @@ namespace Gst.Base {
 
 		// End of the ABI representation.
 
-		[DllImport("libgstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_collect_pads_get_type();
 
 		public static new GLib.GType GType { 
@@ -69,7 +69,7 @@ namespace Gst.Base {
 			}
 		}
 
-		[DllImport("libgstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_collect_pads_add_pad(IntPtr raw, IntPtr pad, uint size, Gst.BaseSharp.CollectDataDestroyNotifyNative destroy_notify, bool _lock);
 
 		public Gst.Base.CollectData AddPad(Gst.Pad pad, uint size, Gst.Base.CollectDataDestroyNotify destroy_notify, bool _lock) {
@@ -80,7 +80,7 @@ namespace Gst.Base {
 			return ret;
 		}
 
-		[DllImport("libgstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern uint gst_collect_pads_available(IntPtr raw);
 
 		public uint Available() {
@@ -89,22 +89,20 @@ namespace Gst.Base {
 			return ret;
 		}
 
-		[DllImport("libgstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
-		static extern int gst_collect_pads_clip_running_time(IntPtr raw, IntPtr cdata, IntPtr buf, IntPtr outbuf, IntPtr user_data);
+		[DllImport("gstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		static extern int gst_collect_pads_clip_running_time(IntPtr raw, IntPtr cdata, IntPtr buf, out IntPtr outbuf, IntPtr user_data);
 
-		public Gst.FlowReturn ClipRunningTime(Gst.Base.CollectData cdata, Gst.Buffer buf, Gst.Buffer outbuf, IntPtr user_data) {
+		public Gst.FlowReturn ClipRunningTime(Gst.Base.CollectData cdata, Gst.Buffer buf, out Gst.Buffer outbuf, IntPtr user_data) {
 			IntPtr native_cdata = GLib.Marshaller.StructureToPtrAlloc (cdata);
-			int raw_ret = gst_collect_pads_clip_running_time(Handle, native_cdata, buf == null ? IntPtr.Zero : buf.Handle, outbuf == null ? IntPtr.Zero : outbuf.Handle, user_data);
+			IntPtr native_outbuf;
+			int raw_ret = gst_collect_pads_clip_running_time(Handle, native_cdata, buf == null ? IntPtr.Zero : buf.Handle, out native_outbuf, user_data);
 			Gst.FlowReturn ret = (Gst.FlowReturn) raw_ret;
 			Marshal.FreeHGlobal (native_cdata);
+			outbuf = native_outbuf == IntPtr.Zero ? null : (Gst.Buffer) GLib.Opaque.GetOpaque (native_outbuf, typeof (Gst.Buffer), true);
 			return ret;
 		}
 
-		public Gst.FlowReturn ClipRunningTime(Gst.Base.CollectData cdata, Gst.Buffer buf) {
-			return ClipRunningTime (cdata, buf, null, IntPtr.Zero);
-		}
-
-		[DllImport("libgstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern bool gst_collect_pads_event_default(IntPtr raw, IntPtr data, IntPtr evnt, bool discard);
 
 		public bool EventDefault(Gst.Base.CollectData data, Gst.Event evnt, bool discard) {
@@ -115,7 +113,7 @@ namespace Gst.Base {
 			return ret;
 		}
 
-		[DllImport("libgstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern uint gst_collect_pads_flush(IntPtr raw, IntPtr data, uint size);
 
 		public uint Flush(Gst.Base.CollectData data, uint size) {
@@ -126,7 +124,7 @@ namespace Gst.Base {
 			return ret;
 		}
 
-		[DllImport("libgstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_collect_pads_peek(IntPtr raw, IntPtr data);
 
 		public Gst.Buffer Peek(Gst.Base.CollectData data) {
@@ -137,7 +135,7 @@ namespace Gst.Base {
 			return ret;
 		}
 
-		[DllImport("libgstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_collect_pads_pop(IntPtr raw, IntPtr data);
 
 		public Gst.Buffer Pop(Gst.Base.CollectData data) {
@@ -148,7 +146,7 @@ namespace Gst.Base {
 			return ret;
 		}
 
-		[DllImport("libgstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern bool gst_collect_pads_query_default(IntPtr raw, IntPtr data, IntPtr query, bool discard);
 
 		public bool QueryDefault(Gst.Base.CollectData data, Gst.Query query, bool discard) {
@@ -159,7 +157,7 @@ namespace Gst.Base {
 			return ret;
 		}
 
-		[DllImport("libgstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_collect_pads_read_buffer(IntPtr raw, IntPtr data, uint size);
 
 		public Gst.Buffer ReadBuffer(Gst.Base.CollectData data, uint size) {
@@ -170,7 +168,7 @@ namespace Gst.Base {
 			return ret;
 		}
 
-		[DllImport("libgstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern bool gst_collect_pads_remove_pad(IntPtr raw, IntPtr pad);
 
 		public bool RemovePad(Gst.Pad pad) {
@@ -179,7 +177,7 @@ namespace Gst.Base {
 			return ret;
 		}
 
-		[DllImport("libgstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_collect_pads_set_buffer_function(IntPtr raw, Gst.BaseSharp.CollectPadsBufferFunctionNative func, IntPtr user_data);
 
 		public Gst.Base.CollectPadsBufferFunction BufferFunction { 
@@ -189,7 +187,7 @@ namespace Gst.Base {
 			}
 		}
 
-		[DllImport("libgstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_collect_pads_set_clip_function(IntPtr raw, Gst.BaseSharp.CollectPadsClipFunctionNative clipfunc, IntPtr user_data);
 
 		public Gst.Base.CollectPadsClipFunction ClipFunction { 
@@ -199,7 +197,7 @@ namespace Gst.Base {
 			}
 		}
 
-		[DllImport("libgstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_collect_pads_set_compare_function(IntPtr raw, Gst.BaseSharp.CollectPadsCompareFunctionNative func, IntPtr user_data);
 
 		public Gst.Base.CollectPadsCompareFunction CompareFunction { 
@@ -209,7 +207,7 @@ namespace Gst.Base {
 			}
 		}
 
-		[DllImport("libgstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_collect_pads_set_event_function(IntPtr raw, Gst.BaseSharp.CollectPadsEventFunctionNative func, IntPtr user_data);
 
 		public Gst.Base.CollectPadsEventFunction EventFunction { 
@@ -219,7 +217,7 @@ namespace Gst.Base {
 			}
 		}
 
-		[DllImport("libgstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_collect_pads_set_flush_function(IntPtr raw, Gst.BaseSharp.CollectPadsFlushFunctionNative func, IntPtr user_data);
 
 		public Gst.Base.CollectPadsFlushFunction FlushFunction { 
@@ -229,7 +227,7 @@ namespace Gst.Base {
 			}
 		}
 
-		[DllImport("libgstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_collect_pads_set_flushing(IntPtr raw, bool flushing);
 
 		public bool Flushing { 
@@ -238,7 +236,7 @@ namespace Gst.Base {
 			}
 		}
 
-		[DllImport("libgstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_collect_pads_set_function(IntPtr raw, Gst.BaseSharp.CollectPadsFunctionNative func, IntPtr user_data);
 
 		public Gst.Base.CollectPadsFunction Function { 
@@ -248,7 +246,7 @@ namespace Gst.Base {
 			}
 		}
 
-		[DllImport("libgstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_collect_pads_set_query_function(IntPtr raw, Gst.BaseSharp.CollectPadsQueryFunctionNative func, IntPtr user_data);
 
 		public Gst.Base.CollectPadsQueryFunction QueryFunction { 
@@ -258,7 +256,7 @@ namespace Gst.Base {
 			}
 		}
 
-		[DllImport("libgstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_collect_pads_set_waiting(IntPtr raw, IntPtr data, bool waiting);
 
 		public void SetWaiting(Gst.Base.CollectData data, bool waiting) {
@@ -267,7 +265,7 @@ namespace Gst.Base {
 			Marshal.FreeHGlobal (native_data);
 		}
 
-		[DllImport("libgstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern bool gst_collect_pads_src_event_default(IntPtr raw, IntPtr pad, IntPtr evnt);
 
 		public bool SrcEventDefault(Gst.Pad pad, Gst.Event evnt) {
@@ -276,21 +274,21 @@ namespace Gst.Base {
 			return ret;
 		}
 
-		[DllImport("libgstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_collect_pads_start(IntPtr raw);
 
 		public void Start() {
 			gst_collect_pads_start(Handle);
 		}
 
-		[DllImport("libgstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern void gst_collect_pads_stop(IntPtr raw);
 
 		public void Stop() {
 			gst_collect_pads_stop(Handle);
 		}
 
-		[DllImport("libgstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport("gstbase-1.0-0.dll", CallingConvention = CallingConvention.Cdecl)]
 		static extern IntPtr gst_collect_pads_take_buffer(IntPtr raw, IntPtr data, uint size);
 
 		public Gst.Buffer TakeBuffer(Gst.Base.CollectData data, uint size) {
@@ -304,7 +302,7 @@ namespace Gst.Base {
 
 		static CollectPads ()
 		{
-			GtkSharp.GstSharp.ObjectManager.Initialize ();
+			GtkSharp.GstreamerSharp.ObjectManager.Initialize ();
 		}
 
 		// Internal representation of the wrapped structure ABI.
