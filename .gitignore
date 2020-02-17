@@ -1,7 +1,7 @@
 ## Add custom content for this repo bellow this
 
 BuildOutput/
-Generated/
+# generated/
 
 subprojects/
 
